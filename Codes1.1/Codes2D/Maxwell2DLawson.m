@@ -19,15 +19,16 @@ Cfine = [];
 Ccoarse = [];
 
 % compute the constants in the Lawson-LRSK scheme
-rk4cLawson = [0 rk4c];   % We need c[0]. What should the value be?
+rk4cLawson = [0 rk4c];   % We need c(0). What should the value be?
 matexp1 = expm((1-rk4cLawson(6))*dt*Cfine);
 
-c1 = zeros(1, 5); % have to use cells !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-c2 = zeros(1, 5);
+matexp2 = cell(1,5);
+c1 = cell(1,5);
+c2 = cell(1,5);
 for k = 1:5
-    matexp2 = expm((rk4cLawson(k+1)-rk4cLawson(k))*dt*Cfine);
-    c1(k) = rk4a(k) * matexp2;
-    c2(k) = dt * Ccoarse * matexp2;
+    matexp2{k} = expm((rk4cLawson(k+1)-rk4cLawson(k))*dt*Cfine);
+    c1{k} = rk4a(k) * matexp2{k};
+    c2{k} = dt * Ccoarse * matexp2{k};
 end
 
 
@@ -36,15 +37,21 @@ while (time<FinalTime)
   
   if(time+dt>FinalTime), dt = FinalTime-time; end
   
+  % Lawson-LSRK scheme
   phi1 = U;
   phi2 = zeros(size(U));
   for k = 1:5
       phi2 = c1(k) * phi2 + c2(k) * phi1;
-      phi1 = %%%%%%
-       
+      phi1 = matexp2{k} * phi1 + rk4b(k) * phi2;
   end
-   
+  U = matexp1 * phi1;
+  
    % Increment time
    time = time+dt;
 end
+
+% convert U back to Ez, Hx, Hy
+Ez = [];
+Hx = [];
+Hy = [];
 return
