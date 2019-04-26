@@ -41,7 +41,7 @@ while (time<FinalTime)
   phi1 = U;
   phi2 = zeros(size(U));
   for k = 1:5
-      phi2 = c1(k) * phi2 + c2(k) * phi1;
+      phi2 = c1{k} * phi2 + c2{k} * phi1;
       phi1 = matexp2{k} * phi1 + rk4b(k) * phi2;
   end
   U = matexp1 * phi1;

@@ -11,6 +11,7 @@ N = 3;
 
 % Initialize solver and construct grid and metric
 StartUp2D;
+InitMatLawson;
 
 % Set initial conditions
 mmode = 1; nmode = 1;

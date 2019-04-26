@@ -2,10 +2,10 @@
 Globals2D;
 
 % Polynomial order used for approximation 
-N = 10;
+N = 3;
 
 % Read in Mesh
-[Nv, VX, VY, K, EToV] = MeshReaderGambit2D('Maxwell025.neu');
+[Nv, VX, VY, K, EToV] = MeshReaderGambit2D('Maxwell1.neu');
 
 % Initialize solver and construct grid and metric
 StartUp2D;
