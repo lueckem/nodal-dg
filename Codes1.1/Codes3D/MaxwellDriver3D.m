@@ -3,10 +3,10 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 6;
+N = 2;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK6.neu');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
 
 % Initialize solver and construct grid and metric
 StartUp3D;
@@ -23,7 +23,7 @@ xmode = 1; ymode = 1;
 Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 % Solve Problem
-FinalTime = 10;
+FinalTime = 0.1;
 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3D(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime);
 
