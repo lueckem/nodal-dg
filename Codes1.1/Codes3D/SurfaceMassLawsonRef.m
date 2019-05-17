@@ -1,17 +1,15 @@
-function [SurfaceMassMatrix] = SurfaceMassLawson(N,R,S,T,k)
-% calculates Sum(S_ik) for the k-th Element
+function [SurfaceMassMatrix] = SurfaceMassLawsonRef(N,R,S,T)
+% calculates Sum(S_ik) for the reference Element
 
 Globals3D;
 
 SurfaceMassMatrix = zeros(3*Np);
 
-% surface Jacobians for the 4 faces
-sJacobian = [sJ(1,k), sJ(Nfp+1,k), sJ(2*Nfp+1, k), sJ(3*Nfp+1,k)];
-
-%normals for the 4 faces
-normals = [nx(1,k), nx(Nfp+1,k), nx(2*Nfp+1, k), nx(3*Nfp+1,k);
-           ny(1,k), ny(Nfp+1,k), ny(2*Nfp+1, k), ny(3*Nfp+1,k);
-           nz(1,k), nz(Nfp+1,k), nz(2*Nfp+1, k), nz(3*Nfp+1,k)];
+n1 = [0;0;-1];
+n2 = [0;-1;0];
+n3 = [1;1;1]./sqrt(3);
+n4 = [-1;0;0];
+normals = [n1, n2, n3, n4];
 
 for face=1:Nfaces
   % process face
@@ -22,7 +20,7 @@ for face=1:Nfaces
   
   F = zeros(Np);
   VFace = Vandermonde2D(N, faceR, faceS);
-  massFace = sJacobian(face) .* inv(VFace*VFace');
+  massFace = inv(VFace*VFace');
   
   for i=1:Nfp
      for j=1:Nfp
@@ -42,4 +40,15 @@ for face=1:Nfaces
   
 end
 end
+
+% plot reference element
+% figure;
+% plot3(r(fmask1),s(fmask1),t(fmask1),'r.')
+% hold on;
+% plot3(r(fmask2),s(fmask2),t(fmask2),'g.')
+% plot3(r(fmask3),s(fmask3),t(fmask3),'b.')
+% plot3(r(fmask4),s(fmask4),t(fmask4),'k.')
+% xlabel('r')
+% ylabel('s')
+% zlabel('t')
 
