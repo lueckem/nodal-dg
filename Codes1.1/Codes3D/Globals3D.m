@@ -15,7 +15,7 @@ global V invV
 global x y z NODETOL
 
 % Variables for Lawson scheme
-global globalMassMatrix globalStiffnessMatrix globalSurfaceMassMatrix
+global globalMassMatrix globalStiffnessMatrix
 
 In = 1; Out = 2; Wall = 3; Far = 4; Cyl = 5; Dirichlet = 6; Neuman = 7; Slip = 8;
 
