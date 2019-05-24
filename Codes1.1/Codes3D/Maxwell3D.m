@@ -5,6 +5,7 @@ function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3D(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime)
 %            initial conditions Hx,Hy,Hz, Ex,Ey,Ez
 
 Globals3D;
+Ez_time = [];
 
 % Runge-Kutta residual storage  
 resHx = zeros(Np,K); resHy = zeros(Np,K); resHz = zeros(Np,K); 
@@ -36,6 +37,9 @@ while (time<FinalTime) % outer time step loop
    
    time = time+dt;    % Increment time
    tstep = tstep+1;
+   
+   %store field value over time
+   Ez_time = [Ez_time, Ez(1,1)];
 end
 return;
 

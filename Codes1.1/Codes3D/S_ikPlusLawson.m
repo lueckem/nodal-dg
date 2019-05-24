@@ -1,4 +1,4 @@
-function [S_ikP] = S_ikPlusLawson(i, k, N, R, S, T)
+function [S_ikP] = S_ikPlusLawson(i, k, R, S, T)
 % calculate the Matrix S_ik^Plus
 
 Globals3D;

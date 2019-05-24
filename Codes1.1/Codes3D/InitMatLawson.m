@@ -12,24 +12,29 @@ end
 
 %Stiffness Matrix K
 globalStiffnessMatrix = zeros(3 * Np * K);
+invM = inv(MassMatrix);
+
 for k = 1:K
-    Dx = rx(1,k) * Dr + sx(1,k) * Ds;
-    Dy = ry(1,k) * Dr + sy(1,k) * Ds;
-    %Dz = ...
+    Dx = rx(1,k) * Dr + sx(1,k) * Ds + tx(1,k) * Dt;
+    Dy = ry(1,k) * Dr + sy(1,k) * Ds + ty(1,k) * Dt;
+    Dz = rz(1,k) * Dr + sz(1,k) * Ds + tz(1,k) * Dt;
     
-    invMk = inv(J(1, k) * MassMatrix);
-    Sx = invMk * Dx;
-    Sy = invMk * Dy;
-    Sz = zeros(Np);
-    %Sz = invMk * Dz;
+    Sx = invM * Dx;
+    Sy = invM * Dy;
+    Sz = invM * Dz;
     
     Sk = blkdiag(Sx, Sy, Sz);
-    globalStiffnessMatrix((k-1)*3*Np+1 : k*3*Np, (k-1)*3*Np+1 : k*3*Np) = Sk - SurfaceMassLawson(N,r,s,t,k);
+    globalStiffnessMatrix((k-1)*3*Np+1 : k*3*Np, (k-1)*3*Np+1 : k*3*Np) = Sk - SurfaceMassLawson(r,s,t,k);
 end
 for i = 1:K
     for k = 1:K
         if i~=k
-            globalStiffnessMatrix((i-1)*3*Np+1 : i*3*Np, (k-1)*3*Np+1 : k*3*Np) = S_ikPlusLawson(i,k,N,r,s,t);
+            globalStiffnessMatrix((i-1)*3*Np+1 : i*3*Np, (k-1)*3*Np+1 : k*3*Np) = S_ikPlusLawson(i,k,r,s,t);
         end
     end
 end
+
+% epsilon = my = 1
+A = blkdiag(globalMassMatrix, globalMassMatrix);
+B = [zeros(3 * Np * K), globalStiffnessMatrix; -globalStiffnessMatrix, zeros(3 * Np * K)];
+Cmat = A * B;

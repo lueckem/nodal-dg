@@ -1,4 +1,5 @@
 % Driver script for solving the 3D vacuum Maxwell's equations
+% using the Lawson scheme
 
 Globals3D;
 
@@ -10,6 +11,9 @@ N = 2;
 
 % Initialize solver and construct grid and metric
 StartUp3D;
+
+% fine part of the grid
+fine_idx = [1,3];
 
 % Set initial conditions
 mmode = 1; nmode = 1;
@@ -25,4 +29,4 @@ Ez = 1e10 * sin(xmode*pi*x).*sin(ymode*pi*y);
 % Solve Problem
 FinalTime = 8;
 
-[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3D(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime);
+[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,fine_idx);

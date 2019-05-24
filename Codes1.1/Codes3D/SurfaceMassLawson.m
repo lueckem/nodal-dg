@@ -1,4 +1,4 @@
-function [SurfaceMassMatrix] = SurfaceMassLawson(N,R,S,T,k)
+function [SurfaceMassMatrix] = SurfaceMassLawson(R,S,T,k)
 % calculates Sum(S_ik) for the k-th Element
 
 Globals3D;
