@@ -9,7 +9,7 @@ Globals3D;
 dHx = zeros(Nfp*Nfaces,K); dHy = dHx; dHz = dHx; 
 dEx = zeros(Nfp*Nfaces,K); dEy = dEx; dEz = dEx; 
 
-% form field differences at faces
+% form field differences at faces  
 dHx(:)  = Hx(vmapP)-Hx(vmapM);  dEx(:)  = Ex(vmapP)-Ex(vmapM);	
 dHy(:)  = Hy(vmapP)-Hy(vmapM); 	dEy(:)  = Ey(vmapP)-Ey(vmapM);	
 dHz(:)  = Hz(vmapP)-Hz(vmapM);  dEz(:)  = Ez(vmapP)-Ez(vmapM);  

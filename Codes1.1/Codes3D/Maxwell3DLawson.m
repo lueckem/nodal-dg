@@ -1,9 +1,11 @@
-function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime, fine_idx)
+function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime, fine_idx, source,source_coordinates)
 
 % function [Hx,Hy,Hz,Ex,Ey,Ez] =Maxwell3D(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime)
 % Purpose  : Integrate 3D Maxwell's until FinalTime starting with
-%            initial conditions Hx,Hy,Hz, Ex,Ey,Ez
-% fine_idx = indices of elements belonging to the fine part of the grid
+%            initial conditions Hx,Hy,Hz, Ex,Ey,Ez ;
+% fine_idx = indices of elements belonging to the fine part of the grid;
+% the point source given by "source" is injected at the node nearest to
+% "source_coordinates" into the Hx field
 
 Globals3D;
 Ez_time = [];
