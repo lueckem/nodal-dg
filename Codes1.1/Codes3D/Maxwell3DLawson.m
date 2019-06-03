@@ -1,11 +1,11 @@
-function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime, fine_idx, source,source_coordinates)
+function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime,source,source_coordinates)
 
 % function [Hx,Hy,Hz,Ex,Ey,Ez] =Maxwell3D(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime)
 % Purpose  : Integrate 3D Maxwell's until FinalTime starting with
 %            initial conditions Hx,Hy,Hz, Ex,Ey,Ez ;
 % fine_idx = indices of elements belonging to the fine part of the grid;
 % the point source given by "source" is injected at the node nearest to
-% "source_coordinates" into the Hx field
+% "source_coordinates" into the Ez field
 
 Globals3D;
 Ez_time = [];
@@ -14,7 +14,7 @@ Ez_time = [];
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
@@ -22,22 +22,10 @@ time = 0; tstep = 1;
 % be consistent with the basis functions and the Matrices
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
-% initialize the needed matrices
-InitMatLawson;
+% find node to inject the source
+idx = findNearestNode(source_coordinates);
+idx = idxEH_to_idxU(3, idx);
 
-P = zeros(Np*K,1);
-for k = 1:K
-   if ismember(k, fine_idx)
-      P((k-1)*Np+1 : k * Np) = ones(Np, 1); 
-   end
-end
-P2 = ones(Np*K, 1) - P;
-P = [P;P;P;P;P;P];
-P2 = [P2;P2;P2;P2;P2;P2];
-P = diag(P);
-P2 = diag(P2);
-Cfine = Cmat * P;
-Ccoarse = Cmat * P2;
 
 % compute the constants in the Lawson-LRSK scheme
 rk4cLawson = [0 rk4c];   % We need c(0). What should the value be?
@@ -53,8 +41,14 @@ for k = 1:5
 end
 
 
+%store field value over time
+Ez_time = [Ez_time, [time; U(idxEH_to_idxU(3, node_idx))]];
+
 % outer time step loop 
 while (time<FinalTime)
+    
+  % inject the source
+  U(idx) = U(idx) + source(time);
   
   % Lawson-LSRK scheme
   phi1 = U;
@@ -70,7 +64,7 @@ while (time<FinalTime)
    tstep = tstep + 1;
    
    %store field value over time
-   Ez_time = [Ez_time, U(2*Np*K+1)];
+   Ez_time = [Ez_time, [time; U(idxEH_to_idxU(3, node_idx))]];
 end
 
 % convert U back to field components

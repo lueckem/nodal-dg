@@ -4,23 +4,15 @@ function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx, Hy, Hz, Ex, Ey, Ez, Fina
 % Purpose  : Integrate 3D Maxwell's until FinalTime starting with
 %            initial conditions Hx,Hy,Hz, Ex,Ey,Ez
 % the point source given by "source" is injected at the node nearest to
-% "source_coordinates" into the Hx field
+% "source_coordinates" into the Ez field
 
 Globals3D;
 Ez_time = [];
 
 % find node to inject the source
-min_dist = norm([x(1,1), y(1,1), z(1,1)] - source_coordinates);
-idx = [1,1];
-for k = 1:K
-   for i = 1:Np
-       dist = norm([x(i,k), y(i,k), z(i,k)] - source_coordinates);
-      if dist < min_dist
-          min_dist = dist;
-          idx = [i,k];
-      end
-   end
-end
+idx = findNearestNode(source_coordinates);
+
+%[x(idx(1),idx(2)), y(idx(1),idx(2)), z(idx(1),idx(2))]
 
 % Runge-Kutta residual storage  
 resHx = zeros(Np,K); resHy = zeros(Np,K); resHz = zeros(Np,K); 
@@ -30,14 +22,16 @@ resEx = zeros(Np,K); resEy = zeros(Np,K); resEz = zeros(Np,K);
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
+
+% nextplottime = 0.1;
 
 while (time<FinalTime) % outer time step loop 
     
   % inject the source
-  Hx(idx(1), idx(2)) = Hx(idx(1), idx(2)) + source(time);
+  Ez(idx(1), idx(2)) = Ez(idx(1), idx(2)) + source(time);
     
   for INTRK = 1:5   % inner multi-stage Runge-Kutta loop
     
@@ -57,7 +51,14 @@ while (time<FinalTime) % outer time step loop
    tstep = tstep+1;
    
    %store field value over time
-   Ez_time = [Ez_time, Ez(1,75)];
+   Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
+   
+   %plot
+%    if time > nextplottime
+%        nextplottime = nextplottime + 0.1;
+%        figure;
+%        PlotSlice3D(2*N, Hx, 'x', .2);
+%    end
 end
 return;
 

@@ -147,5 +147,6 @@ if(Nks>0)
 
   % plot slice
   trisurf(tris, sampx, sampy, sampz, sampu); shading interp;
+  
 end
 return

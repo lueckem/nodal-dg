@@ -36,5 +36,24 @@ end
 
 % epsilon = my = 1
 A = blkdiag(globalMassMatrix, globalMassMatrix);
+clear globalMassMatrix
 B = [zeros(3 * Np * K), globalStiffnessMatrix; -globalStiffnessMatrix, zeros(3 * Np * K)];
+clear globalStiffnessMatrix
 Cmat = A * B;
+clear A B
+
+P = zeros(Np*K,1);
+for k = 1:K
+   if ismember(k, fine_idx)
+      P((k-1)*Np+1 : k * Np) = ones(Np, 1); 
+   end
+end
+P2 = ones(Np*K, 1) - P;
+P = [P;P;P;P;P;P];
+P2 = [P2;P2;P2;P2;P2;P2];
+P = diag(P);
+P2 = diag(P2);
+Cfine = Cmat * P;
+Ccoarse = Cmat * P2;
+
+clear Cmat P P2

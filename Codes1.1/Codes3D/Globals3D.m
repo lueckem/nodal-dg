@@ -15,10 +15,10 @@ global V invV
 global x y z NODETOL
 
 % Variables for Lawson scheme
-global MassMatrix globalMassMatrix globalStiffnessMatrix Cmat
+global fine_idx Cfine Ccoarse rk4cLawson matexp1 matexp2 c1 c2
 
 % Variable to store field values over time
-global Ez_time
+global Ez_time node_idx
 
 In = 1; Out = 2; Wall = 3; Far = 4; Cyl = 5; Dirichlet = 6; Neuman = 7; Slip = 8;
 
