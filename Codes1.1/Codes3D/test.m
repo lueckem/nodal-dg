@@ -7,20 +7,20 @@ Globals3D;
 N = 1;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cube.neu');
 
 % Initialize solver and construct grid and metric
 StartUp3D;
 
 % Source function
-source = @(t) sin(2*pi*t);
-%source = @(t) 0.2 * exp(-0.5*(t-5).^2).*sin(2*pi*t);
+%source = @(t) sin(2*pi*t);
+source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
 source_coordinates = [0,0,0];
 
 %sample node over time
-node_idx = findNearestNode([0,0,0]);
+node_idx = findNearestNode([0.5,0.5,0]);
 
-FinalTime = 2;
+FinalTime = 1;
 
 %% Maxwell3D
 % zero initial condition 
@@ -38,7 +38,7 @@ hold on
 % fine part of the mesh
 fine_idx = [];
 
-InitMatLawson;
+InitMatLawsonSparse;
 %% Time integration
 
 % zero initial condition 
@@ -47,7 +47,7 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
-plot(Ez_time(1,:), Ez_time(2,:), 'b');
-legend('Maxwell3D', 'Lawson');
+%plot(Ez_time(1,:), Ez_time(2,:), 'b');
+%legend('Maxwell3D', 'Lawson');
 
 

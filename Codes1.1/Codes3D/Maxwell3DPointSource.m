@@ -26,7 +26,7 @@ Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-% nextplottime = 0.1;
+nextplottime = 0.1;
 
 while (time<FinalTime) % outer time step loop 
     
@@ -54,11 +54,13 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
    
    %plot
-%    if time > nextplottime
-%        nextplottime = nextplottime + 0.1;
-%        figure;
-%        PlotSlice3D(2*N, Hx, 'x', .2);
-%    end
+   if time > nextplottime
+       nextplottime = nextplottime + 0.2;
+       f = figure('visible','off');
+       PlotPlain3D(0, Ez); drawnow; pause(0.1);
+       filename = "field" + num2str(tstep + ".png");
+       saveas(f,filename)
+   end
 end
 return;
 

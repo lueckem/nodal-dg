@@ -1,10 +1,11 @@
 % Initialize the Matrices needed for the Lawson scheme
+% not viable for grids with > 100 elements
 
 % Mass Matrix M
 globalMassMatrix = zeros(3 * Np * K);
 
 for k = 1 : K
-    Mk = J(1, k) * MassMatrix;
+    Mk = inv(J(1, k) * MassMatrix);
     Mk = blkdiag(Mk, Mk, Mk);
     globalMassMatrix((k-1)*3*Np+1 : k*3*Np, (k-1)*3*Np+1 : k*3*Np) = Mk;
 end
