@@ -47,7 +47,7 @@ end
 Ez_time = [Ez_time, [time; U(idxEH_to_idxU(3, node_idx))]];
 nextplottime = 0.1;
 
-% outer time step loop 
+% outer time step loop
 while (time<FinalTime)
     
   % inject the source

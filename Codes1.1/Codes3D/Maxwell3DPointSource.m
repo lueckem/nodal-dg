@@ -56,6 +56,7 @@ while (time<FinalTime) % outer time step loop
    %plot
    if time > nextplottime
        nextplottime = nextplottime + 0.2;
+       % save plot
        f = figure('visible','off');
        PlotPlain3D(0, Ez); drawnow; pause(0.1);
        filename = "field" + num2str(tstep + ".png");

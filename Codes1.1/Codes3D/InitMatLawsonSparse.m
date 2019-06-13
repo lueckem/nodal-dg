@@ -14,7 +14,7 @@ for i = 1:K
     Sx = invM * Dx;
     Sy = invM * Dy;
     Sz = invM * Dz;
-    S = blkdiag(Sx, Sy, Sz);
+    S = [zeros(Np), -Sz, Sy; Sz, zeros(Np), -Sx; -Sy, Sx, zeros(Np)];
     
     % Mass
     invMi = inv(J(1, i) * MassMatrix);

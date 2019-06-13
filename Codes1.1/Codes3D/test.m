@@ -29,9 +29,9 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
-figure;
-plot(Ez_time(1,:), Ez_time(2,:), 'r');
-hold on
+% figure;
+% plot(Ez_time(1,:), Ez_time(2,:), 'r');
+% hold on
 
 %% Lawson
 %% Initialize Matrices
@@ -49,5 +49,3 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 %plot(Ez_time(1,:), Ez_time(2,:), 'b');
 %legend('Maxwell3D', 'Lawson');
-
-
