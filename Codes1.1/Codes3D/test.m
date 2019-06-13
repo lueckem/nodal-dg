@@ -49,3 +49,14 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 %plot(Ez_time(1,:), Ez_time(2,:), 'b');
 %legend('Maxwell3D', 'Lawson');
+
+%% Maxwell3DMat
+fine_idx = [];
+InitMatLawsonSparse;
+%%
+% zero initial condition 
+Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
+Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
+
+[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DMat(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
+

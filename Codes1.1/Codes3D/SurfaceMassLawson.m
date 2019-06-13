@@ -26,7 +26,7 @@ for face=1:Nfaces
   
   for i=1:Nfp
      for j=1:Nfp
-         F(Fmask(i,face), Fmask(j,face)) = 0.5 * massFace(i, j);
+         F(Fmask(i,face), Fmask(j,face)) = 0.5 * massFace(i, j); %wrong?
      end
   end
   
