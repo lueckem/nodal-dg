@@ -11,7 +11,6 @@ Globals3D;
 Ez_time = [];
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
-resU = zeros(2*3*Np*K,1);
 
 % find node to inject the source
 idx = findNearestNode(source_coordinates);
@@ -31,8 +30,10 @@ while (time<FinalTime) % outer time step loop
     
   % inject the source
   U(idx) = U(idx) + source(time);
-    
-  for INTRK = 1:5   % inner multi-stage Runge-Kutta loop	
+  
+  % Runge-Kutta loop	
+  resU = zeros(2*3*Np*K,1);
+  for INTRK = 1:5   
     resU = rk4a(INTRK)*resU + dt*Ccoarse*U;
     U = U + rk4b(INTRK)*resU;
   end
@@ -53,5 +54,9 @@ while (time<FinalTime) % outer time step loop
        saveas(f,filename)
    end
 end
+
+% convert U back to field components
+[Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
+
 return;
 

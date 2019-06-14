@@ -1,7 +1,7 @@
 % Initialize the Matrices needed for the Lawson scheme using sparse
 % matrices
 blksize = 3 * Np;
-Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, blksize^2 * K * 2); % How much memory do I need?
+Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, blksize^2 * K * 2 * 3); % How much memory do I need?
 Cfine = spalloc(2 * blksize * K, 2 * blksize * K, blksize^2 * K * 2); % How much memory do I need?
 
 % Upper Right Block
@@ -11,7 +11,7 @@ for i = 1:K
     Dx = rx(1,i) * Dr + sx(1,i) * Ds + tx(1,i) * Dt;
     Dy = ry(1,i) * Dr + sy(1,i) * Ds + ty(1,i) * Dt;
     Dz = rz(1,i) * Dr + sz(1,i) * Ds + tz(1,i) * Dt;
-    Sx = invM * Dx;
+    Sx = invM * Dx; %invM or invMi?
     Sy = invM * Dy;
     Sz = invM * Dz;
     S = [zeros(Np), -Sz, Sy; Sz, zeros(Np), -Sx; -Sy, Sx, zeros(Np)];
