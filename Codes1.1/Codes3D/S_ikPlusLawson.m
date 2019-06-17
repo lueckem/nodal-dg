@@ -2,13 +2,14 @@ function [S_ikP] = S_ikPlusLawson(i, k, R, S, T)
 % calculate the Matrix S_ik^Plus
 
 Globals3D;
-S_ikP = zeros(3*Np);
 
 % check if element i and k have a common face
 [bool, face_i] = ismember(k, EToE(i,:));
 if ~bool
    return; 
 end
+
+S_ikP = zeros(3*Np);
 
 % face_k is the face number of element k of the common face
 face_k = EToF(i,face_i);
@@ -47,12 +48,12 @@ for j = 1:Nfp
 end
 
 %build S_ikPlus
-S_ikP(1:Np,Np+1:2*Np) = S_ikP(1:Np,Np+1:2*Np) - normal(3).*F;
-S_ikP(1:Np,2*Np+1:3*Np) = S_ikP(1:Np,2*Np+1:3*Np) + normal(2).*F;
-S_ikP(Np+1:2*Np,1:Np) = S_ikP(Np+1:2*Np,1:Np) + normal(3).*F;
-S_ikP(Np+1:2*Np,2*Np+1:3*Np) = S_ikP(Np+1:2*Np,2*Np+1:3*Np) - normal(1).*F;
-S_ikP(2*Np+1:3*Np,1:Np) = S_ikP(2*Np+1:3*Np,1:Np) - normal(2).*F;
-S_ikP(2*Np+1:3*Np,Np+1:2*Np) = S_ikP(2*Np+1:3*Np,Np+1:2*Np) + normal(1).*F;
+S_ikP(1:Np,Np+1:2*Np) = -normal(3).*F;
+S_ikP(1:Np,2*Np+1:3*Np) = normal(2).*F;
+S_ikP(Np+1:2*Np,1:Np) = normal(3).*F;
+S_ikP(Np+1:2*Np,2*Np+1:3*Np) = -normal(1).*F;
+S_ikP(2*Np+1:3*Np,1:Np) = -normal(2).*F;
+S_ikP(2*Np+1:3*Np,Np+1:2*Np) = normal(1).*F;
 
 end
 
