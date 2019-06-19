@@ -42,10 +42,22 @@ for i = 1:K
     end
 end
 
-% Lower Left Block (=Upper Right because eps=my=1)
+% Lower Left Block (=-Upper Right because eps=my=1)
 Ccoarse(K*blksize+1:end, 1:K*blksize) = -Ccoarse(1:K*blksize, K*blksize+1:end);
 Cfine(K*blksize+1:end, 1:K*blksize) = -Cfine(1:K*blksize, K*blksize+1:end);
 
+%Upper Left Block
+for i=1:K
+    invMi = inv(J(1, i) * MassMatrix);
+    invMi = blkdiag(invMi, invMi, invMi);
+    
+    if ismember(i, fine_idx)
+        Cfine((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
+    else
+        Ccoarse((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
+    end
+end
 
-
-
+%Lower Right Block (=Upper Left because eps=my=1)
+Ccoarse(K*blksize+1:end, K*blksize+1:end) = Ccoarse(1:K*blksize, 1:K*blksize);
+Cfine(K*blksize+1:end, K*blksize+1:end) = Cfine(1:K*blksize, 1:K*blksize);

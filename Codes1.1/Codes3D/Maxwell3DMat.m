@@ -20,7 +20,7 @@ idx = idxEH_to_idxU(3, idx);
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps/10
 
 time = 0; tstep = 1;
 

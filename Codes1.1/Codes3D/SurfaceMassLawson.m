@@ -1,17 +1,17 @@
-function [SurfaceMassMatrix] = SurfaceMassLawson(R,S,T,k)
-% calculates Sum(S_ik) for the k-th Element
+function [SurfaceMassMatrix] = SurfaceMassLawson(R,S,T,i)
+% calculates Sum(S_ik) for the i-th Element
 
 Globals3D;
 
 SurfaceMassMatrix = zeros(3*Np);
 
 % surface Jacobians for the 4 faces
-sJacobian = [sJ(1,k), sJ(Nfp+1,k), sJ(2*Nfp+1, k), sJ(3*Nfp+1,k)];
+sJacobian = [sJ(1,i), sJ(Nfp+1,i), sJ(2*Nfp+1, i), sJ(3*Nfp+1,i)];
 
 %normals for the 4 faces
-normals = [nx(1,k), nx(Nfp+1,k), nx(2*Nfp+1, k), nx(3*Nfp+1,k);
-           ny(1,k), ny(Nfp+1,k), ny(2*Nfp+1, k), ny(3*Nfp+1,k);
-           nz(1,k), nz(Nfp+1,k), nz(2*Nfp+1, k), nz(3*Nfp+1,k)];
+normals = [nx(1,i), nx(Nfp+1,i), nx(2*Nfp+1, i), nx(3*Nfp+1,i);
+           ny(1,i), ny(Nfp+1,i), ny(2*Nfp+1, i), ny(3*Nfp+1,i);
+           nz(1,i), nz(Nfp+1,i), nz(2*Nfp+1, i), nz(3*Nfp+1,i)];
 
 for face=1:Nfaces
   % process face
@@ -24,9 +24,9 @@ for face=1:Nfaces
   VFace = Vandermonde2D(N, faceR, faceS);
   massFace = sJacobian(face) .* inv(VFace*VFace');
   
-  for i=1:Nfp
+  for l=1:Nfp
      for j=1:Nfp
-         F(Fmask(i,face), Fmask(j,face)) = 0.5 * massFace(i, j); %wrong?
+         F(Fmask(l,face), Fmask(j,face)) = 0.5 * massFace(l, j); %wrong?
      end
   end
   
