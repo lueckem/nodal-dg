@@ -53,7 +53,7 @@ while (time<FinalTime) % outer time step loop
    %plot
    %if time > nextplottime
        [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
-       nextplottime = nextplottime + 0.2;
+       nextplottime = nextplottime + 0.1;
        f = figure('visible','off');
        PlotPlain3D(0, Ez); drawnow; pause(0.1);
        filename = "field" + num2str(tstep + ".png");
