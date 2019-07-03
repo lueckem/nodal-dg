@@ -11,7 +11,7 @@ Ez_time = [];
 
 
 f = figure('visible','off');
-PlotPlain3D(0, Ez); drawnow; pause(0.1);
+PlotPlain3D(1, Ez); drawnow; pause(0.1);
 filename = "field" + num2str(0 + ".png");
 saveas(f,filename)
        

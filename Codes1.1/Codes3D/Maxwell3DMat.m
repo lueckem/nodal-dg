@@ -10,11 +10,10 @@ function [Hx, Hy, Hz, Ex, Ey, Ez] = Maxwell3DMat(Hx, Hy, Hz, Ex, Ey, Ez, FinalTi
 Globals3D;
 Ez_time = [];
 
-       
-       f = figure('visible','off');
-       PlotPlain3D(0, Ez); drawnow; pause(0.1);
-       filename = "field" + num2str(1+ ".png");
-       saveas(f,filename)
+f = figure('visible','off');
+PlotPlain3D(0, Ez); drawnow; pause(0.1);
+filename = "field" + num2str(1+ ".png");
+saveas(f,filename)
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
@@ -26,7 +25,7 @@ idx = idxEH_to_idxU(3, idx);
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps /2
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps /10
 
 time = 0; tstep = 1;
 

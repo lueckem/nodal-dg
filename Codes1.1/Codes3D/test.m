@@ -27,9 +27,11 @@ FinalTime = 0.5;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
+xmode = 1; ymode = 1; 
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
-node_source = findNearestNode(source_coordinates);
-Ez(:,node_source(2)) = 1;
+% node_source = findNearestNode(source_coordinates);
+% Ez(:,node_source(2)) = 1;
 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
@@ -61,8 +63,10 @@ InitMatLawsonSparse;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
-%node_source = findNearestNode(source_coordinates);
-%Ez(:,node_source(2)) = 1;
+% 1 element
+% node_source = findNearestNode(source_coordinates);
+% Ez(:,node_source(2)) = 1;
+% mode
 xmode = 1; ymode = 1; 
 Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 

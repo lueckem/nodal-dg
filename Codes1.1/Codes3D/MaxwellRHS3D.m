@@ -19,7 +19,7 @@ dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB);
 dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
 dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
 
-alpha=1; % => full upwinding
+alpha=1;
 
 ndotdH = nx.*dHx + ny.*dHy + nz.*dHz;
 ndotdE = nx.*dEx + ny.*dEy + nz.*dEz;

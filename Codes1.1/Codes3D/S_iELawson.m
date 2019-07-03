@@ -20,7 +20,7 @@ for face=1:Nfaces
   
   % surface Jacobian
   sJacobian = sJ(Nfp*(face-1)+1,i);
-
+  
   % normal vector
   n_x = nx(Nfp*(face-1)+1,i);
   n_y = ny(Nfp*(face-1)+1,i);
