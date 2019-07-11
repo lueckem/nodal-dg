@@ -6,9 +6,9 @@ Globals3D;
 blksize = K*3*Np;
 
 if field < 4
-    idxU = (idxEH(2)-1)*3*Np + (field-1)*Np + idxEH(1);
+    idxU = (idxEH(:,2)-1)*3*Np + (field-1)*Np + idxEH(:,1);
 else
-    idxU = (idxEH(2)-1)*3*Np+blksize + (field-4)*Np + idxEH(1);
+    idxU = (idxEH(:,2)-1)*3*Np+blksize + (field-4)*Np + idxEH(:,1);
 end
 end
 

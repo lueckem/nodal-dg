@@ -17,19 +17,20 @@ saveas(f,filename)
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
-% find node to inject the source
+% find element to inject the source
 idx = findNearestNode(source_coordinates);
+idx = [(1:Np)', idx(2)*ones(Np,1)]; 
 idx = idxEH_to_idxU(3, idx);
 
 % compute time step size
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps /10
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-nextplottime = 0.1;
+nextplottime = 0.2;
 
 while (time<FinalTime) % outer time step loop 
     
@@ -47,21 +48,21 @@ while (time<FinalTime) % outer time step loop
    tstep = tstep+1;
    
    %store field value over time
+   [~,~,~,~,Ez] = UToFields(U);
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
    
    %plot
-   %if time > nextplottime
-       [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
-       nextplottime = nextplottime + 0.1;
+   if time > nextplottime
+       [~,~,~,~,Ez] = UToFields(U);
+       nextplottime = nextplottime + 0.2;
        f = figure('visible','off');
-       PlotPlain3D(0, Ez); drawnow; pause(0.1);
+       PlotPlain3D(0, Ez); drawnow; pause(0.01);
        filename = "field" + num2str(tstep + ".png");
        saveas(f,filename)
-   %end
+  end
 end
 
 % convert U back to field components
 [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
-
 return;
 

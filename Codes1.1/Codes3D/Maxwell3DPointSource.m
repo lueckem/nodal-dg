@@ -3,7 +3,7 @@ function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx, Hy, Hz, Ex, Ey, Ez, Fina
 % function [Hx,Hy,Hz,Ex,Ey,Ez] =Maxwell3D(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime)
 % Purpose  : Integrate 3D Maxwell's until FinalTime starting with
 %            initial conditions Hx,Hy,Hz, Ex,Ey,Ez
-% the point source given by "source" is injected at the node nearest to
+% the point source given by "source" is injected at the element nearest to
 % "source_coordinates" into the Ez field
 
 Globals3D;
@@ -15,10 +15,9 @@ PlotPlain3D(1, Ez); drawnow; pause(0.1);
 filename = "field" + num2str(0 + ".png");
 saveas(f,filename)
        
-% find node to inject the source
+% find element to inject the source
 idx = findNearestNode(source_coordinates);
-
-%[x(idx(1),idx(2)), y(idx(1),idx(2)), z(idx(1),idx(2))]
+idx = idx(2);
 
 % Runge-Kutta residual storage  
 resHx = zeros(Np,K); resHy = zeros(Np,K); resHz = zeros(Np,K); 
@@ -28,21 +27,21 @@ resEx = zeros(Np,K); resEy = zeros(Np,K); resEz = zeros(Np,K);
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps /2
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-% nextplottime = 0.1;
+nextplottime = 0.2;
 
 while (time<FinalTime) % outer time step loop 
     
   % inject the source
-  Ez(idx(1), idx(2)) = Ez(idx(1), idx(2)) + source(time);
+  Ez(:, idx) = Ez(:, idx) + source(time);
     
   for INTRK = 1:5   % inner multi-stage Runge-Kutta loop
     
     % compute right hand side of TM-mode Maxwell's equations
-    [rhsHx, rhsHy, rhsHz, rhsEx, rhsEy, rhsEz] = MaxwellRHS3D(Hx,Hy,Hz, Ex, Ey, Ez);
+    [rhsHx, rhsHy, rhsHz, rhsEx, rhsEy, rhsEz] = MaxwellRHS3D(Hx,Hy,Hz,Ex,Ey,Ez);
     
     % initiate, increment Runge-Kutta residuals and update fields
     resHx = rk4a(INTRK)*resHx + dt*rhsHx;   Hx = Hx+rk4b(INTRK)*resHx;  	
@@ -60,14 +59,15 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
    
    %plot
-   %if time > nextplottime
-       %nextplottime = nextplottime + 0.2;
+   if time > nextplottime
+       nextplottime = nextplottime + 0.2;
        % save plot
        f = figure('visible','off');
-       PlotPlain3D(0, Ez); drawnow; pause(0.1);
+       PlotPlain3D(0, Ez); drawnow; pause(0.01);
        filename = "field" + num2str(tstep + ".png");
+       title(num2str(time));
        saveas(f,filename)
-   %end
+   end
 end
 return;
 
