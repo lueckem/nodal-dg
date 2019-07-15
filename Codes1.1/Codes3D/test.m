@@ -9,7 +9,7 @@ Globals3D;
 N = 1;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cube.neu');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
 
 % Initialize solver and construct grid and metric
 StartUp3D;

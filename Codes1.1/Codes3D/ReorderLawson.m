@@ -14,10 +14,10 @@ C_idx = [fine_idx_long, (fine_idx_long + K*3*Np), coarse_idx_long, (coarse_idx_l
 % Reordering columns
 Cfine = Cfine(:,C_idx);
 Ccoarse = Ccoarse(:,C_idx);
-U = U(C_idx);
 
-%Reordering Rows %%WRONG
+%Reordering Rows 
 Cfine = Cfine(C_idx,:);
 Ccoarse = Ccoarse(C_idx,:);
+U = U(C_idx);
 
 clear("fine_idx_long", "coarse_idx_long");
