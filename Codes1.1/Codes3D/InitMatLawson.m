@@ -1,5 +1,6 @@
 % Initialize the Matrices needed for the Lawson scheme
 % not viable for grids with > 100 elements
+% wrong
 
 % Mass Matrix M
 globalMassMatrix = zeros(3 * Np * K);
