@@ -3,6 +3,8 @@ pw = pwd;
 addpath([pw,'/Codes1D']);
 addpath([pw,'/Codes2D']);
 addpath([pw,'/Codes3D']);
+addpath([pw,'/Codes3D/tests']);
+
 addpath([pw,'/ServiceRoutines']);
 addpath([pw,'/CFD1D']);
 addpath([pw,'/CFD2D']);

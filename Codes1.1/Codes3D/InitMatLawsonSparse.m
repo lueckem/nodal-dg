@@ -1,8 +1,16 @@
 % Initialize the Matrices needed for the Lawson scheme using sparse
 % matrices
+
 blksize = 3 * Np;
-Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, blksize^2 * K * 2 * 3); % How much memory do I need?
-Cfine = spalloc(2 * blksize * K, 2 * blksize * K, blksize^2 * K * 2); % How much memory do I need?
+
+%allocate memory
+if isempty(fine_idx) == 0
+    frac_fine = 0; % fraction of fine elements
+else
+    frac_fine = length(fine_idx)/K;
+end
+Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, round((1-frac_fine) * 78*K*Np^2));
+Cfine = spalloc(2 * blksize * K, 2 * blksize * K, round(frac_fine * 78*K*Np^2));
 
 % Upper Right Block
 for i = 1:K
