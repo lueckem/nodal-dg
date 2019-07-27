@@ -2,8 +2,10 @@ function PlotPlain3D(zloc, u)
 % plots a x-y-crossection at z = zloc of the field u
 
 Globals3D;
-
-[x_grid, y_grid] = meshgrid(-1:0.05:1);
+min_x = min(x,[],'all');
+max_x = max(x,[],'all');
+step = (max_x - min_x)/50;
+[x_grid, y_grid] = meshgrid(min_x:step:max_x);
 
 % sample u
 field = zeros(size(x_grid,1));

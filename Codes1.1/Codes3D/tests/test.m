@@ -6,24 +6,24 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 1;
+N = 3;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK268.neu');
 
 % Initialize solver and construct grid and metric
 StartUp3D;
 
 % Source function
-source = @(t) sin(2*pi*t);
+%source = @(t) sin(2*pi*t);
 %source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
-%source = @(t) 0;
+source = @(t) 0;
 source_coordinates = [0,0,0];
 
 %sample node over time
 node_idx = findNearestNode([0.5,0.5,0]);
 
-FinalTime = 4;
+FinalTime = 1;
 
 %% Maxwell3D
 % zero initial condition 
@@ -56,14 +56,16 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 %% Maxwell3DMat
 fine_idx = [];
+tic;
 InitMatLawsonSparse;
+toc;
 %%
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 % 1 element
-%node_source = findNearestNode(source_coordinates);
-% Ez(:,node_source(2)) = 1;
+node_source = findNearestNode(source_coordinates);
+Ez(:,node_source(2)) = 1;
 % mode
 %xmode = 1; ymode = 1; 
 %Ez = sin(xmode*pi*x).*sin(ymode*pi*y);

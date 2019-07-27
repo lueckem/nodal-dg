@@ -3,7 +3,7 @@
 
 blksize = 3 * Np;
 
-%allocate memory
+% allocate memory
 if isempty(fine_idx) == 0
     frac_fine = 0; % fraction of fine elements
 else
@@ -11,6 +11,9 @@ else
 end
 Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, round((1-frac_fine) * 78*K*Np^2));
 Cfine = spalloc(2 * blksize * K, 2 * blksize * K, round(frac_fine * 78*K*Np^2));
+
+% Inverse of MassMatrix
+invM = inv(MassMatrix);
 
 % Upper Right Block
 for i = 1:K
@@ -21,7 +24,7 @@ for i = 1:K
     S = [zeros(Np), -Dz, Dy; Dz, zeros(Np), -Dx; -Dy, Dx, zeros(Np)];
     
     % Mass
-    invMi = inv(J(1, i) * MassMatrix);
+    invMi = invM./J(1, i);
     invMi = blkdiag(invMi, invMi, invMi);
     
     % Diagonal entry
@@ -52,7 +55,7 @@ Cfine(K*blksize+1:end, 1:K*blksize) = -Cfine(1:K*blksize, K*blksize+1:end);
 
 %Upper Left Block
 for i=1:K
-    invMi = inv(J(1, i) * MassMatrix);
+    invMi = invM./J(1, i);
     invMi = blkdiag(invMi, invMi, invMi);
     
     if ismember(i, fine_idx)

@@ -22,6 +22,9 @@ idx = findNearestNode(source_coordinates);
 idx = [(1:Np)', idx(2)*ones(Np,1)]; 
 idx = idxEH_to_idxU(3, idx);
 
+% find element so sample field
+idx_sample = idxEH_to_idxU(3, node_idx);
+
 % compute time step size
 dt = dtscale3D;  % TW: buggy
 
@@ -30,7 +33,7 @@ Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-nextplottime = 0.2;
+nextplottime = 0.05;
 
 while (time<FinalTime) % outer time step loop 
     
@@ -48,18 +51,17 @@ while (time<FinalTime) % outer time step loop
    tstep = tstep+1;
    
    %store field value over time
-   [~,~,~,~,Ez] = UToFields(U);
-   Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
+   Ez_time = [Ez_time, [time;U(idx_sample)]];
    
    %plot
-   if time > nextplottime
+   %if time > nextplottime
        [~,~,~,~,Ez] = UToFields(U);
-       nextplottime = nextplottime + 0.2;
+       nextplottime = nextplottime + 0.05;
        f = figure('visible','off');
        PlotPlain3D(0, Ez); drawnow; pause(0.01);
        filename = "field" + num2str(tstep + ".png");
        saveas(f,filename)
-  end
+  %end
 end
 
 % convert U back to field components
