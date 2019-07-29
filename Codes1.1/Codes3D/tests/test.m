@@ -6,7 +6,7 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 3;
+N = 2;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK268.neu');
@@ -29,8 +29,8 @@ FinalTime = 1;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
-%xmode = 1; ymode = 1; 
-%Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
+xmode = 1; ymode = 1; 
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 % node_source = findNearestNode(source_coordinates);
 % Ez(:,node_source(2)) = 1;
@@ -64,11 +64,11 @@ toc;
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 % 1 element
-node_source = findNearestNode(source_coordinates);
-Ez(:,node_source(2)) = 1;
+%node_source = findNearestNode(source_coordinates);
+%Ez(:,node_source(2)) = 1;
 % mode
-%xmode = 1; ymode = 1; 
-%Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
+xmode = 1; ymode = 1; 
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DMat(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 

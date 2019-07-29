@@ -11,7 +11,7 @@ Ez_time = [];
 
 
 f = figure('visible','off');
-PlotPlain3D(1, Ez); drawnow; pause(0.1);
+PlotPlain3D(0, Ez); drawnow; pause(0.1);
 filename = "field" + num2str(0 + ".png");
 saveas(f,filename)
        
@@ -41,7 +41,7 @@ while (time<FinalTime) % outer time step loop
   for INTRK = 1:5   % inner multi-stage Runge-Kutta loop
     
     % compute right hand side of TM-mode Maxwell's equations
-    [rhsHx, rhsHy, rhsHz, rhsEx, rhsEy, rhsEz] = MaxwellRHS3D(Hx,Hy,Hz,Ex,Ey,Ez);
+    [rhsHx, rhsHy, rhsHz, rhsEx, rhsEy, rhsEz] = MaxwellRHS3DTest(Hx,Hy,Hz,Ex,Ey,Ez);
     
     % initiate, increment Runge-Kutta residuals and update fields
     resHx = rk4a(INTRK)*resHx + dt*rhsHx;   Hx = Hx+rk4b(INTRK)*resHx;  	
@@ -59,7 +59,7 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
    
    %plot
-   if time > nextplottime
+   %if time > nextplottime
        nextplottime = nextplottime + 0.2;
        % save plot
        f = figure('visible','off');
@@ -67,7 +67,7 @@ while (time<FinalTime) % outer time step loop
        filename = "field" + num2str(tstep + ".png");
        title(num2str(time));
        saveas(f,filename)
-   end
+   %end
 end
 return;
 

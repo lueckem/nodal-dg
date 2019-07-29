@@ -30,7 +30,7 @@ for i = 1:K
     % Diagonal entry
     S = S - invMi * SurfaceMassLawson(r,s,t,i);
     
-    % fill the row
+    % fill the row %fix: only 4 blocks can be nonzero
     for j = 1:K
         % Check whether to write into Cfine or Ccoarse
         if ismember(j, fine_idx)

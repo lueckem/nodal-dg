@@ -20,6 +20,8 @@ norm(Ex - Ex2)
 norm(Ey - Ey2)
 norm(Ez - Ez2)
 
+% Conclusion: the conversions work properly.
+
 %% test conversion and reordering
 fine_idx = [145, 345, 2, 1002, 53];
 

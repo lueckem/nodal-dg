@@ -29,7 +29,7 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
 
 time = 0; tstep = 1;
 
@@ -59,6 +59,7 @@ while (time<FinalTime) % outer time step loop
        nextplottime = nextplottime + 0.05;
        f = figure('visible','off');
        PlotPlain3D(0, Ez); drawnow; pause(0.01);
+       title(num2str(time));
        filename = "field" + num2str(tstep + ".png");
        saveas(f,filename)
   %end

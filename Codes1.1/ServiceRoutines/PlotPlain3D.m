@@ -7,7 +7,7 @@ max_x = max(x,[],'all');
 step = (max_x - min_x)/50;
 [x_grid, y_grid] = meshgrid(min_x:step:max_x);
 
-% sample u
+% sample u, this loop is very slow!
 field = zeros(size(x_grid,1));
 for i = 1:size(x_grid,1)
     for j = 1:size(y_grid,1)
