@@ -42,7 +42,7 @@ for j = 1:Nfp
        %l in element k
        [~, l2] = ismember(nodes_k_minus(l), nodes_i_plus);
        
-       F(Fmask(j,face_i), Fmask(l,face_i)) = -0.5 * massFace(j, l2);
+       F(Fmask(j,face_i), Fmask(l,face_i)) = 0.5 * massFace(j, l2);
    end
 end
 

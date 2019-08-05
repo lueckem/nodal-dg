@@ -2,15 +2,23 @@
 
 Globals3D; 
 N = 1;
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
 StartUp3D;
 
-Ex = sin(1*pi*x).*sin(1*pi*y);
-Ey = sin(2*pi*x).*sin(2*pi*y);
-Ez = sin(3*pi*x).*sin(3*pi*y);
-Hx = sin(4*pi*x).*sin(4*pi*y);
-Hy = sin(5*pi*x).*sin(5*pi*y);
-Hz = sin(6*pi*x).*sin(6*pi*y);
+% Ex = sin(1*pi*x).*sin(1*pi*y);
+% Ey = sin(2*pi*x).*sin(2*pi*y);
+% Ez = sin(3*pi*x).*sin(3*pi*y);
+% Hx = sin(4*pi*x).*sin(4*pi*y);
+% Hy = sin(5*pi*x).*sin(5*pi*y);
+% Hz = sin(6*pi*x).*sin(6*pi*y);
+
+Ex = x;
+Ey = y;
+Ez = z;
+Hx = 2.*x;
+Hy = 2.*y;
+Hz = 2.*z;
+
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
 %% Flux from Maxwell3D

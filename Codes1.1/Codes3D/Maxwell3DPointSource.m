@@ -41,7 +41,7 @@ while (time<FinalTime) % outer time step loop
   for INTRK = 1:5   % inner multi-stage Runge-Kutta loop
     
     % compute right hand side of TM-mode Maxwell's equations
-    [rhsHx, rhsHy, rhsHz, rhsEx, rhsEy, rhsEz] = MaxwellRHS3DTest(Hx,Hy,Hz,Ex,Ey,Ez);
+    [rhsHx, rhsHy, rhsHz, rhsEx, rhsEy, rhsEz] = MaxwellRHS3D(Hx,Hy,Hz,Ex,Ey,Ez);
     
     % initiate, increment Runge-Kutta residuals and update fields
     resHx = rk4a(INTRK)*resHx + dt*rhsHx;   Hx = Hx+rk4b(INTRK)*resHx;  	

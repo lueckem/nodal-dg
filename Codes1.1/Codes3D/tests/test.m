@@ -15,9 +15,9 @@ N = 2;
 StartUp3D;
 
 % Source function
-%source = @(t) sin(2*pi*t);
+source = @(t) sin(4*pi*t);
 %source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
-source = @(t) 0;
+%source = @(t) 0;
 source_coordinates = [0,0,0];
 
 %sample node over time
@@ -29,8 +29,8 @@ FinalTime = 1;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
-xmode = 1; ymode = 1; 
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
+%xmode = 1; ymode = 1; 
+%Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 % node_source = findNearestNode(source_coordinates);
 % Ez(:,node_source(2)) = 1;
@@ -67,8 +67,8 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 %node_source = findNearestNode(source_coordinates);
 %Ez(:,node_source(2)) = 1;
 % mode
-xmode = 1; ymode = 1; 
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
+%xmode = 1; ymode = 1; 
+%Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DMat(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
