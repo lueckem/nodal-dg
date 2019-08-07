@@ -7,7 +7,7 @@ S_iE = zeros(3*Np);
 Fcell = cell(6,1);
  
 for face=1:Nfaces
-  % check if outer face
+  % check if not outer face
   if EToE(i,face) ~= i
       continue
   end
@@ -33,7 +33,7 @@ for face=1:Nfaces
   
   for l=1:Nfp
      for j=1:Nfp
-         F(Fmask(l,face), Fmask(j,face)) = 0.5 * massFace(l, j); %wrong?
+         F(Fmask(l,face), Fmask(j,face)) = 0.5 * massFace(l, j);
      end
   end
   

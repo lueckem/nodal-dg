@@ -27,6 +27,7 @@ Hy = 0 * ones(Np,K);
 Hz = 0 * ones(Np,K);
 
 Ex(:,2) = 1 * ones(Np,1);
+Ex(:,5) = 2 * ones(Np,1);
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 

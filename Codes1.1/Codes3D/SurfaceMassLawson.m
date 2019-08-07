@@ -24,9 +24,9 @@ for face=1:Nfaces
   VFace = Vandermonde2D(N, faceR, faceS);
   massFace = sJacobian(face) .* inv(VFace*VFace');
   
-  for l=1:Nfp
-     for j=1:Nfp
-         F(Fmask(l,face), Fmask(j,face)) = 0.5 * massFace(l, j);
+  for j=1:Nfp
+     for l=1:Nfp
+         F(Fmask(j,face), Fmask(l,face)) = 0.5 * massFace(j, l);
      end
   end
   
@@ -39,7 +39,6 @@ for face=1:Nfaces
   SurfaceMassMatrix(Np+1:2*Np,2*Np+1:3*Np) = SurfaceMassMatrix(Np+1:2*Np,2*Np+1:3*Np) - normal(1).*F;
   SurfaceMassMatrix(2*Np+1:3*Np,1:Np) = SurfaceMassMatrix(2*Np+1:3*Np,1:Np) - normal(2).*F;
   SurfaceMassMatrix(2*Np+1:3*Np,Np+1:2*Np) = SurfaceMassMatrix(2*Np+1:3*Np,Np+1:2*Np) + normal(1).*F;
-  
 end
 end
 

@@ -36,14 +36,11 @@ VFace = Vandermonde2D(N, faceR, faceS);
 massFace = sJacobian .* inv(VFace*VFace');
 
 %build the F matrix
-for j = 1:Nfp
-   for l = 1:Nfp
-       %find the index l2 of the point in element i corresponding to the point
-       %l in element k
-       [~, l2] = ismember(nodes_k_minus(l), nodes_i_plus);
-       
-       F(Fmask(j,face_i), Fmask(l,face_i)) = 0.5 * massFace(j, l2);
-   end
+for l = 1:Nfp
+    [~, l2] = ismember(nodes_k_minus(l), nodes_i_plus);
+    for j = 1:Nfp
+        F(Fmask(j,face_i), Fmask(l,face_k)) = -0.5 * massFace(j, l2);
+    end
 end
 
 %build S_ikPlus
