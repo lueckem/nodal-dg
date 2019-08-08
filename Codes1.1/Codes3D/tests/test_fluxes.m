@@ -1,3 +1,5 @@
+%% The interior fluxes work!
+
 % compare the fluxes from Maxwell3D with the fluxes from Lawson
 
 Globals3D; 
@@ -25,12 +27,11 @@ Ez = 0 * ones(Np,K);
 Hx = 0 * ones(Np,K);
 Hy = 0 * ones(Np,K);
 Hz = 0 * ones(Np,K);
-
-Ex(:,2) = 1 * ones(Np,1);
+Hx(:,3) = 1 * ones(Np,1);
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
-%% Flux from Maxwell3D
+%% Flux from Maxwell3D, no boundaries
 % storage for field differences at faces
 dHx = zeros(Nfp*Nfaces,K); dHy = dHx; dHz = dHx; 
 dEx = zeros(Nfp*Nfaces,K); dEy = dEx; dEz = dEx; 
@@ -41,10 +42,9 @@ dHy(:)  = Hy(vmapP)-Hy(vmapM); 	dEy(:)  = Ey(vmapP)-Ey(vmapM);
 dHz(:)  = Hz(vmapP)-Hz(vmapM);  dEz(:)  = Ez(vmapP)-Ez(vmapM);  
 
 % make silver mueller boundary conditions
-dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB); 
-dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
-dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
-
+% dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB); 
+% dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
+% dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
 
 fluxHx = -ny.*dEz + nz.*dEy;
 fluxHy = -nz.*dEx + nx.*dEz;
@@ -63,7 +63,7 @@ fluxEx =  LIFT*(Fscale.*fluxEx/2);
 fluxEy =  LIFT*(Fscale.*fluxEy/2);
 fluxEz =  LIFT*(Fscale.*fluxEz/2);
 
-%% Flux from Lawson
+%% Flux from Lawson, no boundaries
 % K matrix
 Kmat = sparse(3*Np*K,3*Np*K,30*K*Np^2);
 blksize = 3 * Np;
@@ -74,7 +74,7 @@ for i = 1:K %rows
     invMi = blkdiag(invMi, invMi, invMi);
     
     % diagonal element
-    Kmat((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = -invMi * SurfaceMassLawson(r,s,t,i);
+    Kmat((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = -invMi * SurfaceMassInteriorLawson(r,s,t,i);
     
     % the SikP
     for j = 1:4
@@ -86,14 +86,64 @@ for i = 1:K %rows
 end
 
 
-% SE matrix
-SE = sparse(3*Np*K,3*Np*K,9*K*Np^2);
-for i = 1:K
-    invMi = invM./J(1, i);
-    invMi = blkdiag(invMi, invMi, invMi);
-    SE((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
-end
+% % SE matrix
+% SE = sparse(3*Np*K,3*Np*K,9*K*Np^2);
+% for i = 1:K
+%     invMi = invM./J(1, i);
+%     invMi = blkdiag(invMi, invMi, invMi);
+%     SE((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
+% end
 
-Kmat = [SE, Kmat; -Kmat, SE];
+Kmat = [sparse(3*Np*K, 3*Np*K), Kmat; -Kmat, sparse(3*Np*K, 3*Np*K)];
 fluxU = Kmat * U;
 [fluxHx2, fluxHy2, fluxHz2, fluxEx2, fluxEy2, fluxEz2] = UToFields(fluxU);
+
+norm(fluxEx - fluxEx2)
+norm(fluxEy - fluxEy2)
+norm(fluxEz - fluxEz2)
+norm(fluxHx - fluxHx2)
+norm(fluxHy - fluxHy2)
+norm(fluxHz - fluxHz2)
+
+
+%% check flux for E
+
+% %find two elements that share a face
+% i = 3;
+% for j = 1:4
+%    if EToE(i,j) ~= i
+%       k =  EToE(i,j);
+%       break;
+%    end
+% end
+% [~, face_i] = ismember(k, EToE(i,:));
+% 
+% % calculate the flux on the face between element i and k
+% 
+% dHx = zeros(Nfp*Nfaces,K); dHy = dHx; dHz = dHx;
+% 
+% dHx(:)  = Hx(vmapP)-Hx(vmapM);
+% dHy(:)  = Hy(vmapP)-Hy(vmapM);
+% dHz(:)  = Hz(vmapP)-Hz(vmapM);
+% 
+% fluxEx =  ny.*dHz - nz.*dHy; fluxEx_i = fluxEx((face_i-1)*Nfp+1:face_i*Nfp,i);
+% fluxEy =  nz.*dHx - nx.*dHz; fluxEy_i = fluxEy((face_i-1)*Nfp+1:face_i*Nfp,i);
+% fluxEz =  nx.*dHy - ny.*dHx; fluxEz_i = fluxEz((face_i-1)*Nfp+1:face_i*Nfp,i);
+% 
+% Fscale_i = Fscale((face_i-1)*Nfp+1:face_i*Nfp,i);
+% LIFT_i = LIFT(1:Np, (face_i-1)*Nfp+1:face_i*Nfp);
+% 
+% fluxEx_i =  LIFT_i*(Fscale_i.*fluxEx_i/2);
+% fluxEy_i =  LIFT_i*(Fscale_i.*fluxEy_i/2);
+% fluxEz_i =  LIFT_i*(Fscale_i.*fluxEz_i/2);
+% 
+% fluxE = [fluxEx_i; fluxEy_i; fluxEz_i];
+% 
+% 
+% %Lawson
+% S_ik = S_ikLawson(r,s,t,i,k);
+% S_ikPlus = S_ikPlusLawson(i,k,r,s,t);
+% invMi = blkdiag(inv(MassMatrix), inv(MassMatrix), inv(MassMatrix)) ./ J(1,i);
+% fluxE2 = -invMi * S_ik * [Hx(:,i);Hy(:,i);Hz(:,i)] - invMi * S_ikPlus * [Hx(:,k);Hy(:,k);Hz(:,k)];
+% 
+% %fluxE = fluxE2 !!!!
