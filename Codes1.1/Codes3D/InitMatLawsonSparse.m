@@ -33,12 +33,11 @@ for i = 1:K
     
     % Add the S_ikPlus
     for j = 1:4
-        k = EToE(i,j);
+        k = EToE(i,j); % k is the index of the neighbour element
         if k == i % check for boundary
             continue
         end
         
-        % Check whether to write into Cfine or Ccoarse
         if ismember(k, fine_idx)
             Cfine((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t);
         else

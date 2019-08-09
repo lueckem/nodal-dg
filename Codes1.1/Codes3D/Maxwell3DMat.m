@@ -13,7 +13,8 @@ Ez_time = [];
 f = figure('visible','off');
 PlotPlain3D(0, Ez); drawnow; pause(0.1);
 filename = "field" + num2str(1+ ".png");
-saveas(f,filename)
+saveas(f,filename);
+close;
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
@@ -61,11 +62,11 @@ while (time<FinalTime) % outer time step loop
        PlotPlain3D(0, Ez); drawnow; pause(0.01);
        title(num2str(time));
        filename = "field" + num2str(tstep + ".png");
-       saveas(f,filename)
+       saveas(f,filename);
+       close;
   %end
 end
 
 % convert U back to field components
 [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
 return;
-

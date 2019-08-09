@@ -6,7 +6,7 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 2;
+N = 3;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK268.neu');

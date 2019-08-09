@@ -3,31 +3,31 @@
 % compare the fluxes from Maxwell3D with the fluxes from Lawson
 
 Globals3D; 
-N = 1;
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
+N = 3;
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
 StartUp3D;
 
-% Ex = sin(1*pi*x).*sin(1*pi*y);
-% Ey = sin(2*pi*x).*sin(2*pi*y);
-% Ez = sin(3*pi*x).*sin(3*pi*y);
-% Hx = sin(4*pi*x).*sin(4*pi*y);
-% Hy = sin(5*pi*x).*sin(5*pi*y);
-% Hz = sin(6*pi*x).*sin(6*pi*y);
+Ex = sin(1*pi*x).*sin(1*pi*y);
+Ey = sin(2*pi*x).*sin(2*pi*y);
+Ez = sin(3*pi*x).*sin(3*pi*y);
+Hx = sin(4*pi*x).*sin(4*pi*y);
+Hy = sin(5*pi*x).*sin(5*pi*y);
+Hz = sin(6*pi*x).*sin(6*pi*y);
 
-% Ex = 1 * ones(Np,K);
-% Ey = 2 * ones(Np,K);
-% Ez = 3 * ones(Np,K);
-% Hx = 4 * ones(Np,K);
-% Hy = 5 * ones(Np,K);
-% Hz = 6 * ones(Np,K);
+% Ex = 1 * rand(Np,K);
+% Ey = 2 * rand(Np,K);
+% Ez = 3 * rand(Np,K);
+% Hx = 4 * rand(Np,K);
+% Hy = 5 * rand(Np,K);
+% Hz = 6 * rand(Np,K);
 
-Ex = 0 * ones(Np,K);
-Ey = 0 * ones(Np,K);
-Ez = 0 * ones(Np,K);
-Hx = 0 * ones(Np,K);
-Hy = 0 * ones(Np,K);
-Hz = 0 * ones(Np,K);
-Hx(:,3) = 1 * ones(Np,1);
+% Ex = 0 * ones(Np,K);
+% Ey = 0 * ones(Np,K);
+% Ez = 0 * ones(Np,K);
+% Hx = 0 * ones(Np,K);
+% Hy = 0 * ones(Np,K);
+% Hz = 0 * ones(Np,K);
+% Hx(:,3) = 1 * ones(Np,1);
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 

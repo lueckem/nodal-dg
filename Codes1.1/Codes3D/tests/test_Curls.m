@@ -1,8 +1,8 @@
 % compare the curls from Curl3D with the curls from Lawson
 
 Globals3D; 
-N = 1;
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cube.neu');
+N = 3;
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
 StartUp3D;
 
 %%
