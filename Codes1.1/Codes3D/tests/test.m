@@ -6,7 +6,7 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 3;
+N = 2;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK268.neu');
@@ -21,9 +21,9 @@ source = @(t) sin(4*pi*t);
 source_coordinates = [0,0,0];
 
 %sample node over time
-node_idx = findNearestNode([0.5,0.5,0]);
+node_idx = findNearestNode([0.25,0.25,0]);
 
-FinalTime = 1;
+FinalTime = 2;
 
 %% Maxwell3D
 % zero initial condition 
@@ -78,16 +78,15 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 %        Ez_time(:,i) = [];
 %    end
 % end
-for i = size(Ez_time2,2):-1:1
-   if abs(Ez_time2(2,i)) > 40
-       Ez_time2(:,i) = [];
-   end
-end
+% for i = size(Ez_time2,2):-1:1
+%    if abs(Ez_time2(2,i)) > 40
+%        Ez_time2(:,i) = [];
+%    end
+% end
 
 figure;
-plot(Ez_time1(1,:), Ez_time1(2,:), 'b');
 hold on;
-plot(Ez_time2(1,:), Ez_time2(2,:), 'r');
-%plot(Ez_time(1,:), Ez_time(2,:), 'k');
-legend("upwind", "central", "Lawson");
+plot(Ez_timeMaxwell(1,:), Ez_timeMaxwell(2,:), 'r');
+plot(Ez_time(1,:), Ez_time(2,:), 'b');
+legend("central", "Lawson");
 

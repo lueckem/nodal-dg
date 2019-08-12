@@ -9,11 +9,10 @@ function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx, Hy, Hz, Ex, Ey, Ez, Fina
 Globals3D;
 Ez_time = [];
 
-
-f = figure('visible','off');
-PlotPlain3D(0, Ez); drawnow; pause(0.1);
-filename = "field" + num2str(0 + ".png");
-saveas(f,filename)
+% f = figure('visible','off');
+% PlotPlain3D(0, Ez); drawnow; pause(0.1);
+% filename = "field" + num2str(0 + ".png");
+% saveas(f,filename)
        
 % find element to inject the source
 idx = findNearestNode(source_coordinates);
@@ -59,7 +58,7 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
    
    %plot
-   %if time > nextplottime
+   if time > nextplottime
        nextplottime = nextplottime + 0.2;
        % save plot
        f = figure('visible','off');
@@ -67,7 +66,7 @@ while (time<FinalTime) % outer time step loop
        filename = "field" + num2str(tstep + ".png");
        title(num2str(time));
        saveas(f,filename)
-   %end
+   end
 end
 return;
 

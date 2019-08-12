@@ -10,11 +10,11 @@ function [Hx, Hy, Hz, Ex, Ey, Ez] = Maxwell3DMat(Hx, Hy, Hz, Ex, Ey, Ez, FinalTi
 Globals3D;
 Ez_time = [];
 
-f = figure('visible','off');
-PlotPlain3D(0, Ez); drawnow; pause(0.1);
-filename = "field" + num2str(1+ ".png");
-saveas(f,filename);
-close;
+% f = figure('visible','off');
+% PlotPlain3D(0, Ez); drawnow; pause(0.1);
+% filename = "field" + num2str(1+ ".png");
+% saveas(f,filename);
+% close;
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
@@ -34,7 +34,9 @@ Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
 
 time = 0; tstep = 1;
 
-nextplottime = 0.05;
+nextplottime = 0.2;
+
+resU = zeros(2*3*Np*K,1);
 
 while (time<FinalTime) % outer time step loop 
     
@@ -42,7 +44,6 @@ while (time<FinalTime) % outer time step loop
   U(idx) = U(idx) + source(time);
   
   % Runge-Kutta loop	
-  resU = zeros(2*3*Np*K,1);
   for INTRK = 1:5   
     resU = rk4a(INTRK)*resU + dt*Ccoarse*U;
     U = U + rk4b(INTRK)*resU;
@@ -55,16 +56,16 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;U(idx_sample)]];
    
    %plot
-   %if time > nextplottime
-       [~,~,~,~,Ez] = UToFields(U);
-       nextplottime = nextplottime + 0.05;
+   if time > nextplottime
+       [~,~,~,~,~,Ez] = UToFields(U);
+       nextplottime = nextplottime + 0.2;
        f = figure('visible','off');
        PlotPlain3D(0, Ez); drawnow; pause(0.01);
        title(num2str(time));
        filename = "field" + num2str(tstep + ".png");
        saveas(f,filename);
        close;
-  %end
+  end
 end
 
 % convert U back to field components
