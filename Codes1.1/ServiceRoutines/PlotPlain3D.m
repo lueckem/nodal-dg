@@ -18,7 +18,5 @@ end
 
 %plot
 surf(x_grid, y_grid, field);
-
-
 end
 

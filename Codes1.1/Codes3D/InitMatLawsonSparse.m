@@ -24,7 +24,7 @@ for i = 1:K
     invMi = blkdiag(invMi, invMi, invMi);
     
     % Diagonal entry
-    S = S - invMi * SurfaceMassLawson(r,s,t,i);
+    S = S - invMi * SurfaceMassInteriorLawson(r,s,t,i);
     if ismember(i, fine_idx)
         Cfine((i-1)*blksize+1:i*blksize, (i-1)*blksize+1+K*blksize:i*blksize+K*blksize) = S;
     else
@@ -52,18 +52,18 @@ Cfine(K*blksize+1:end, 1:K*blksize) = -Cfine(1:K*blksize, K*blksize+1:end);
 
 % Boundary condition not yet working
 
-%Upper Left Block
-for i=1:K
-    invMi = invM./J(1, i);
-    invMi = blkdiag(invMi, invMi, invMi);
-    
-    if ismember(i, fine_idx)
-        Cfine((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
-    else
-        Ccoarse((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
-    end
-end
+% %Upper Left Block
+% for i=1:K
+%     invMi = invM./J(1, i);
+%     invMi = blkdiag(invMi, invMi, invMi);
+%     
+%     if ismember(i, fine_idx)
+%         Cfine((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
+%     else
+%         Ccoarse((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
+%     end
+% end
 
-%Lower Right Block (=Upper Left because eps=my=1)
-Ccoarse(K*blksize+1:end, K*blksize+1:end) = Ccoarse(1:K*blksize, 1:K*blksize);
-Cfine(K*blksize+1:end, K*blksize+1:end) = Cfine(1:K*blksize, 1:K*blksize);
+% %Lower Right Block (=Upper Left because eps=my=1)
+% Ccoarse(K*blksize+1:end, K*blksize+1:end) = Ccoarse(1:K*blksize, 1:K*blksize);
+% Cfine(K*blksize+1:end, K*blksize+1:end) = Cfine(1:K*blksize, 1:K*blksize);

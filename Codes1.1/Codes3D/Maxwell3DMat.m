@@ -10,8 +10,11 @@ function [Hx, Hy, Hz, Ex, Ey, Ez] = Maxwell3DMat(Hx, Hy, Hz, Ex, Ey, Ez, FinalTi
 Globals3D;
 Ez_time = [];
 
+% Calculate Data for plotting
+[x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(0);
+
 % f = figure('visible','off');
-% PlotPlain3D(0, Ez); drawnow; pause(0.1);
+% PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
 % filename = "field" + num2str(1+ ".png");
 % saveas(f,filename);
 % close;
@@ -60,7 +63,7 @@ while (time<FinalTime) % outer time step loop
        [~,~,~,~,~,Ez] = UToFields(U);
        nextplottime = nextplottime + 0.2;
        f = figure('visible','off');
-       PlotPlain3D(0, Ez); drawnow; pause(0.01);
+       PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
        title(num2str(time));
        filename = "field" + num2str(tstep + ".png");
        saveas(f,filename);

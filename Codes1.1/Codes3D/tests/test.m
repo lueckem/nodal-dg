@@ -40,7 +40,7 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 %% Lawson
 %% Initialize Matrices
 % fine part of the mesh
-fine_idx = [100, 52, 679, 1001, 1, 128, 129, 1002];
+fine_idx = [100, 52, 1, 128, 129];
 
 InitMatLawsonSparse;
 %% Time integration
