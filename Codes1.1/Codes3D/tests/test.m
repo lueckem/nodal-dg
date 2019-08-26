@@ -39,8 +39,12 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 %% Lawson
 %% Initialize Matrices
-% fine part of the mesh
-fine_idx = [100, 52, 1, 128, 129];
+% fine part of the mesh = 5 middle elements
+% nodeIndex = findNearestNode([0,0,0]);
+% fine_idx = [nodeIndex(2),EToE(nodeIndex(2),:)];
+% fine_idx = unique(fine_idx);
+
+fine_idx = 1:30;
 
 InitMatLawsonSparse;
 %% Time integration
@@ -49,7 +53,7 @@ InitMatLawsonSparse;
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
-[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
+[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawsonKrylov(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
 %plot(Ez_time(1,:), Ez_time(2,:), 'b');
 %legend('Maxwell3D', 'Lawson');

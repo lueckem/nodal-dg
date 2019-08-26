@@ -1,4 +1,4 @@
-function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime,source,source_coordinates)
+function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawsonKrylov(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime,source,source_coordinates)
 
 % Purpose  : Integrate 3D Maxwell's until FinalTime starting with
 %            initial conditions Hx,Hy,Hz, Ex,Ey,Ez ;
@@ -6,8 +6,8 @@ function [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DLawson(Hx, Hy, Hz, Ex, Ey, Ez, FinalTime
 % the point source given by "source" is injected at the element nearest to
 % "source_coordinates" into the Ez field
 
-% In this version the matrix exponentials are precalculated and stored.
-% This is only viable for less than ~50 elements in the fine part.
+% In this version matrix exponentials of the form exp(alpha*Cfine)*v are
+% calculated during runtime using krylov subspace methods
 
 Globals3D;
 Ez_time = [];
@@ -46,19 +46,7 @@ Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-% compute the constants in the Lawson-LRSK scheme
 rk4cLawson = [0 rk4c];   % We need c(0). What should the value be?
-matexp1 = ExpCfine((1-rk4cLawson(6))*dt);
-%matexp1 = speye(size(Cfine,1)); % for test
-
-matexp2 = cell(1,5);
-c = cell(1,5);
-for k = 1:5
-    matexp2{k} = ExpCfine((rk4cLawson(k+1)-rk4cLawson(k))*dt);
-    %matexp2{k} = speye(size(Cfine,1)); % for test
-    c{k} = dt * Ccoarse * matexp2{k};
-end
-
 phi2 = zeros(size(U));
 
 nextplottime = 0.05;
@@ -72,10 +60,11 @@ while (time<FinalTime)
   % Lawson-LSRK scheme
   phi1 = U;
   for k = 1:5
-      phi2 = rk4a(k) * matexp2{k} * phi2 + c{k} * phi1;
-      phi1 = matexp2{k} * phi1 + rk4b(k) * phi2;
+      phi1star = ExpCfinev((rk4cLawson(k+1)-rk4cLawson(k))*dt, phi1);
+      phi2 = rk4a(k) * ExpCfinev((rk4cLawson(k+1)-rk4cLawson(k))*dt, phi2) + dt * Ccoarse * phi1star;
+      phi1 = phi1star + rk4b(k) * phi2;
   end
-  U = matexp1 * phi1;
+  U = ExpCfinev((1-rk4cLawson(6))*dt, phi1);
   
    % Increment time
    time = time+dt;
@@ -101,3 +90,4 @@ end
 ReorderBackLawson;
 [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
 return;
+

@@ -1,14 +1,15 @@
 % Test if the Reordering is done properly
 
 Globals3D; 
-N = 3;
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
+N = 1;
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
 StartUp3D;
 
 % 5 middle elements
 nodeIndex = findNearestNode([0,0,0]);
-fine_idx = [nodeIndex(2),EToE(nodeIndex(2),:)];
-fine_idx = unique(fine_idx);
+%fine_idx = [nodeIndex(2),EToE(nodeIndex(2),:)];
+%fine_idx = unique(fine_idx);
+fine_idx = nodeIndex(2);
 InitMatLawsonSparse;
 
 % Ex = sin(1*pi*x).*sin(1*pi*y);

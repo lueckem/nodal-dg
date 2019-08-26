@@ -17,4 +17,4 @@ addpath([pw,'/Grid/Euler2D']);
 addpath([pw,'/Grid/Maxwell2D']);
 addpath([pw,'/Grid/Other']);
 
-
+addpath([pw,'/expokit']);

@@ -50,7 +50,7 @@ end
 Ccoarse(K*blksize+1:end, 1:K*blksize) = -Ccoarse(1:K*blksize, K*blksize+1:end);
 Cfine(K*blksize+1:end, 1:K*blksize) = -Cfine(1:K*blksize, K*blksize+1:end);
 
-% Boundary condition not yet working
+% Boundary condition not working
 
 % %Upper Left Block
 % for i=1:K
@@ -63,7 +63,7 @@ Cfine(K*blksize+1:end, 1:K*blksize) = -Cfine(1:K*blksize, K*blksize+1:end);
 %         Ccoarse((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = invMi * S_iELawson(i,r,s,t);
 %     end
 % end
-
+% 
 % %Lower Right Block (=Upper Left because eps=my=1)
 % Ccoarse(K*blksize+1:end, K*blksize+1:end) = Ccoarse(1:K*blksize, 1:K*blksize);
 % Cfine(K*blksize+1:end, K*blksize+1:end) = Cfine(1:K*blksize, 1:K*blksize);
