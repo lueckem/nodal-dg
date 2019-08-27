@@ -47,6 +47,10 @@ Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 time = 0; tstep = 1;
 
 rk4cLawson = [0 rk4c];   % We need c(0). What should the value be?
+size_Cff = 2*3*Np*length(fine_idx);
+Cff = Cfine(1:size_Cff,1:size_Cff);
+Ccf = Cfine(size_Cff+1:2*3*Np*K,1:size_Cff);
+
 phi2 = zeros(size(U));
 
 nextplottime = 0.05;

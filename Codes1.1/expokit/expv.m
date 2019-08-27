@@ -77,6 +77,11 @@
 
 function [w, err, hump] = expv( t, A, v, tol, m )
 
+% if v'*v == 0
+%    w = zeros(length(v),1);
+%    return
+% end
+
 [n,n] = size(A);
 if nargin == 3,
   tol = 1.0e-7;
@@ -87,7 +92,8 @@ if nargin == 4,
 end;
 
 anorm = norm(A,'inf'); 
-mxrej = 10;  btol  = 1.0e-7; 
+mxrej = 10; 
+btol  = 1.0e-7; 
 gamma = 0.9; delta = 1.2; 
 mb    = m; t_out   = abs(t);
 nstep = 0; t_new   = 0;

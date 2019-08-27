@@ -39,10 +39,11 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 [~, idx_sample] = ismember(idx_sample, C_idx);
 
 % compute time step size
-dt = dtscale3D;  % TW: buggy
+%dt = dtscale3D  % TW: buggy
+dt = 0.018;
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
+%Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
@@ -64,6 +65,8 @@ phi2 = zeros(size(U));
 nextplottime = 0.05;
 
 % outer time step loop
+disp("starting time integration")
+tic;
 while (time<FinalTime)
     
   % inject the source
@@ -96,6 +99,7 @@ while (time<FinalTime)
    %store field value over time
    Ez_time = [Ez_time, [time;U(idx_sample)]];
 end
+toc;
 
 % convert U back to field components
 ReorderBackLawson;

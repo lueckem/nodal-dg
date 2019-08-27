@@ -15,7 +15,7 @@ global V invV
 global x y z NODETOL
 
 % Variables for Lawson scheme
-global fine_idx Cfine Ccoarse C_idx rk4cLawson matexp1 matexp2 c1 c2
+global fine_idx Cfine Ccoarse C_idx size_Cff Cff Ccf
 
 % Variables for plotting
 global Ez_time node_idx

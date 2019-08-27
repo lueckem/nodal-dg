@@ -30,10 +30,11 @@ idx = idxEH_to_idxU(3, idx);
 idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
-dt = dtscale3D;  % TW: buggy
+%dt = dtscale3D  % TW: buggy
+dt = 0.0035
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
+%Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
 
 time = 0; tstep = 1;
 
@@ -41,6 +42,7 @@ nextplottime = 0.05;
 
 resU = zeros(2*3*Np*K,1);
 
+tic;
 while (time<FinalTime) % outer time step loop 
     
   % inject the source
@@ -70,6 +72,7 @@ while (time<FinalTime) % outer time step loop
 %        close;
 %   end
 end
+toc;
 
 % convert U back to field components
 [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);

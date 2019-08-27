@@ -73,6 +73,11 @@
 
 function [w, err] = phiv( t, A, u, v, tol, m )
 
+% if u'*u == 0
+%    w = zeros(length(v),1);
+%    return
+% end
+
 [n,n] = size(A);
 if nargin == 4,
   tol = 1.0e-7;
