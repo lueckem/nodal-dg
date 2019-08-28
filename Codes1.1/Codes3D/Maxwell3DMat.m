@@ -30,15 +30,20 @@ idx = idxEH_to_idxU(3, idx);
 idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
-%dt = dtscale3D  % TW: buggy
-dt = 0.0035
+dt = dtscale3D  % TW: buggy
+%dt = 0.0035
 
 % correct dt for integer # of time steps
-%Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
 
 time = 0; tstep = 1;
 
 nextplottime = 0.05;
+
+% PML fields
+P = zeros(2*3*Np*K,1);
+resP = zeros(2*3*Np*K,1);
+[sigma1, sigma2, sigma3] = constructSigma();
 
 resU = zeros(2*3*Np*K,1);
 
@@ -51,7 +56,12 @@ while (time<FinalTime) % outer time step loop
   % Runge-Kutta loop	
   for INTRK = 1:5   
     resU = rk4a(INTRK)*resU + dt*Ccoarse*U;
+    resU = resU + dt * (blkmult(sigma1, U, Np, K) - P); % add PML terms
     U = U + rk4b(INTRK)*resU;
+    
+    % integrate PML terms
+    resP = rk4a(INTRK)*resP + dt * (blkmult(sigma2,P,Np,K) + blkmult(sigma3,U,Np,K));
+    P = P + rk4b(INTRK) * resP;
   end
    
    time = time+dt;    % Increment time

@@ -17,6 +17,9 @@ global x y z NODETOL
 % Variables for Lawson scheme
 global fine_idx Cfine Ccoarse C_idx size_Cff Cff Ccf
 
+% Variables for PML
+global sigmax sigmay sigmaz 
+
 % Variables for plotting
 global Ez_time node_idx
 

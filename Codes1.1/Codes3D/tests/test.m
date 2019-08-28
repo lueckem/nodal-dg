@@ -15,16 +15,27 @@ N = 2;
 StartUp3D;
 
 % Source function
-source = @(t) sin(4*pi*t);
+%source = @(t) sin(4*pi*t);
 %source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
-%source = @(t) 0;
+source = @(t) 0;
 source_coordinates = [0,0,0];
 
 %sample node over time
 node_idx = findNearestNode([0.25,0.25,0]);
 
-FinalTime = 0.2;
+FinalTime = 2;
 
+%PML every element that is at the boundary
+sigmax = zeros(1, K);
+for i = 1:K
+   for j = 1:4
+      if EToE(i,j) == i
+          sigmax(i) = 1;
+          break;
+      end
+   end
+end
+sigmay = sigmax; sigmaz = sigmax;
 %% Maxwell3D
 % % zero initial condition 
 % Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
@@ -44,7 +55,8 @@ FinalTime = 0.2;
 % fine_idx = [nodeIndex(2),EToE(nodeIndex(2),:)];
 % fine_idx = unique(fine_idx);
 
-fine_idx = 1:100;
+fine_idx = [];
+
 
 %fine_idx = [190,199,207,232,246,248]; %Bad elements in cubeK268BAD
 
@@ -65,17 +77,18 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = ones(Np, K)* eps;
 %legend('Maxwell3D', 'Lawson');
 
 %% Maxwell3DMat
-% fine_idx = [];
-% 
-% InitMatLawsonSparse;
+fine_idx = [];
+
+InitMatLawsonSparse;
 
 %%
+
 % zero initial condition 
-% Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
-% Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
+Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
+Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 % 1 element
-%node_source = findNearestNode(source_coordinates);
-%Ez(:,node_source(2)) = 1;
+node_source = findNearestNode(source_coordinates);
+Ez(:,node_source(2)) = 1;
 % mode
 %xmode = 1; ymode = 1; 
 %Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
@@ -83,7 +96,7 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = ones(Np, K)* eps;
 % load initial conditions from file
 % load("init_cond.mat")
 % 
-% [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DMat(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
+[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DMat(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
 %% Plotting
 % for i = size(Ez_time,2):-1:1
