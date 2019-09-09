@@ -3,7 +3,7 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 2;
+N = 3;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
@@ -20,7 +20,7 @@ Ex = zeros(Np, K); Ey = zeros(Np, K);
 
 %Ez = exp(-20*(x.^2 + y.^2));
 xmode = 1; ymode = 1; 
-Ez = 1e10 * sin(xmode*pi*x).*sin(ymode*pi*y);
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 % Solve Problem
 FinalTime = 8;

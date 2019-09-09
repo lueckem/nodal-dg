@@ -1,5 +1,7 @@
 function [SurfaceMassMatrix] = SurfaceMassLawson(R,S,T,i)
-% calculates Sum(S_ik) for the i-th Element
+% Calculates Sum(S_ik) for the i-th Element.
+% A Silver Mueller boundary of the form dU = -2*U is
+% implemented.
 
 Globals3D;
 
@@ -26,9 +28,16 @@ for face=1:Nfaces
   
   for j=1:Nfp
      for l=1:Nfp
-         F(Fmask(j,face), Fmask(l,face)) = 0.5 * massFace(j, l);
+         F(Fmask(j,face), Fmask(l,face)) = massFace(j, l);
      end
   end
+  
+  if EToE(i,face) == i
+     factor = 1; % boundary face
+  else
+     factor = 0.5; % interior face
+  end
+  F = factor .* F;
   
   normal = normals(:,face);
   

@@ -1,4 +1,4 @@
-%% The interior fluxes work!
+%% The fluxes work!
 
 % compare the fluxes from Maxwell3D with the fluxes from Lawson
 
@@ -6,20 +6,20 @@ Globals3D;
 N = 3;
 [Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK86.neu');
 StartUp3D;
+% 
+% Ex = sin(1*pi*x).*sin(1*pi*y);
+% Ey = sin(2*pi*x).*sin(2*pi*y);
+% Ez = sin(3*pi*x).*sin(3*pi*y);
+% Hx = sin(4*pi*x).*sin(4*pi*y);
+% Hy = sin(5*pi*x).*sin(5*pi*y);
+% Hz = sin(6*pi*x).*sin(6*pi*y);
 
-Ex = sin(1*pi*x).*sin(1*pi*y);
-Ey = sin(2*pi*x).*sin(2*pi*y);
-Ez = sin(3*pi*x).*sin(3*pi*y);
-Hx = sin(4*pi*x).*sin(4*pi*y);
-Hy = sin(5*pi*x).*sin(5*pi*y);
-Hz = sin(6*pi*x).*sin(6*pi*y);
-
-% Ex = 1 * rand(Np,K);
-% Ey = 2 * rand(Np,K);
-% Ez = 3 * rand(Np,K);
-% Hx = 4 * rand(Np,K);
-% Hy = 5 * rand(Np,K);
-% Hz = 6 * rand(Np,K);
+Ex = 1 * rand(Np,K);
+Ey = 2 * rand(Np,K);
+Ez = 3 * rand(Np,K);
+Hx = 4 * rand(Np,K);
+Hy = 5 * rand(Np,K);
+Hz = 10 * rand(Np,K);
 
 % Ex = 0 * ones(Np,K);
 % Ey = 0 * ones(Np,K);
@@ -31,7 +31,7 @@ Hz = sin(6*pi*x).*sin(6*pi*y);
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
-%% Flux from Maxwell3D, no boundaries
+%% Flux from Maxwell3D
 % storage for field differences at faces
 dHx = zeros(Nfp*Nfaces,K); dHy = dHx; dHz = dHx; 
 dEx = zeros(Nfp*Nfaces,K); dEy = dEx; dEz = dEx; 
@@ -42,9 +42,9 @@ dHy(:)  = Hy(vmapP)-Hy(vmapM); 	dEy(:)  = Ey(vmapP)-Ey(vmapM);
 dHz(:)  = Hz(vmapP)-Hz(vmapM);  dEz(:)  = Ez(vmapP)-Ez(vmapM);  
 
 % make silver mueller boundary conditions
-% dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB); 
-% dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
-% dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
+dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB); 
+dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
+dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
 
 fluxHx = -ny.*dEz + nz.*dEy;
 fluxHy = -nz.*dEx + nx.*dEz;
@@ -74,7 +74,7 @@ for i = 1:K %rows
     invMi = blkdiag(invMi, invMi, invMi);
     
     % diagonal element
-    Kmat((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = -invMi * SurfaceMassInteriorLawson(r,s,t,i);
+    Kmat((i-1)*blksize+1:i*blksize, (i-1)*blksize+1:i*blksize) = -invMi * SurfaceMassLawson(r,s,t,i);
     
     % the SikP
     for j = 1:4

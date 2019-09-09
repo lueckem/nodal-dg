@@ -3,36 +3,33 @@ function [sigma1, sigma2, sigma3] = constructSigma()
 % rhsU ~ sigma1 .* U.
 % rhsP ~ sigma2 .* P + sigma3 .* U.
 % sigma is also reordered.
-% to save memory, the sigmas are stored as small as possible (6*K) and to
+% to save memory, the sigmas are stored as small as possible (3*K) and to
 % evaluate the product sigma1 .* U the function blkmult is used
 
 
 Globals3D;
 
 %sigma1
-sigma1 = zeros(6*K, 1);
+sigma1 = zeros(3*K, 1);
 for i = 1:K
    sigma1(3*(i-1)+1:3*i) = -[-sigmax(i)+sigmay(i)+sigmaz(i);
                             sigmax(i)-sigmay(i)+sigmaz(i);
                             sigmax(i)+sigmay(i)-sigmaz(i)];
 end
-sigma1(3*K+1:6*K) = -sigma1(1:3*K);
 
 %sigma2
-sigma2 = zeros(6*K, 1);
+sigma2 = zeros(3*K, 1);
 for i = 1:K
    sigma2(3*(i-1)+1:3*i) = [-sigmax(i);-sigmay(i);-sigmaz(i)];
 end
-sigma2(3*K+1:6*K) = sigma2(1:3*K);
 
 %sigma3
-sigma3 = zeros(6*K, 1);
+sigma3 = zeros(3*K, 1);
 for i = 1:K
    sigma3(3*(i-1)+1:3*i) = [sigmax(i)*sigmax(i) + sigmay(i)*sigmaz(i) - sigmay(i)*sigmax(i) - sigmaz(i)*sigmax(i);
                             sigmay(i)*sigmay(i) + sigmax(i)*sigmaz(i) - sigmaz(i)*sigmay(i) - sigmay(i)*sigmax(i);
                             sigmaz(i)*sigmaz(i) + sigmay(i)*sigmax(i) - sigmaz(i)*sigmax(i) - sigmay(i)*sigmaz(i)];
 end
-sigma3(3*K+1:6*K) = sigma3(1:3*K);
 
 
 % Reordering
@@ -44,7 +41,7 @@ end
 coarse_idx_long = 1:3*K;
 coarse_idx_long(fine_idx_long) = [];
 
-perm_idx = [fine_idx_long, (fine_idx_long + K*3), coarse_idx_long, (coarse_idx_long + K*3)];
+perm_idx = [fine_idx_long, coarse_idx_long];
 
 sigma1=sigma1(perm_idx);
 sigma2=sigma2(perm_idx);

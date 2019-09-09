@@ -10,7 +10,7 @@ Globals3D;
 Ez_time = [];
 
 % Calculate Data for plotting
-[x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(0);
+% [x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(0);
 
 % f = figure('visible','off');
 % PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
@@ -62,15 +62,15 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
    
    %plot
-   if time > nextplottime
-       nextplottime = nextplottime + 0.2;
-       f = figure('visible','off');
-       PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
-       filename = "field" + num2str(tstep + ".png");
-       title(num2str(time));
-       saveas(f,filename);
-       close;
-   end
+%    if time > nextplottime
+%        nextplottime = nextplottime + 0.2;
+%        f = figure('visible','off');
+%        PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
+%        filename = "field" + num2str(tstep + ".png");
+%        title(num2str(time));
+%        saveas(f,filename);
+%        close;
+%    end
 end
 return;
 

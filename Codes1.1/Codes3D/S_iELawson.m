@@ -4,7 +4,6 @@ function [S_iE] = S_iELawson(i, R, S, T)
 Globals3D;
 
 S_iE = zeros(3*Np);
-Fcell = cell(6,1);
  
 for face=1:Nfaces
   % check if not outer face
@@ -31,27 +30,16 @@ for face=1:Nfaces
   VFace = Vandermonde2D(N, faceR, faceS);
   massFace = sJacobian .* inv(VFace*VFace');
   
-  for l=1:Nfp
-     for j=1:Nfp
-         F(Fmask(l,face), Fmask(j,face)) = 0.5 * massFace(l, j);
+  for j=1:Nfp
+     for l=1:Nfp
+         F(Fmask(j,face), Fmask(l,face)) = 0.5 * massFace(j, l);
      end
   end
   
   % build S_ikE
-  factor = dot([n_y^2 + n_z^2; -n_x*n_y; -n_x*n_z], [n_y^2 + n_z^2; -n_x*n_y; -n_x*n_z]);
-  Fcell{1} = factor .* F;
-  
-  factor = dot([-n_y*n_x; n_x^2 + n_z^2; -n_y*n_z], [-n_y*n_x; n_x^2 + n_z^2; -n_y*n_z]);
-  Fcell{2} = factor .* F;
-  
-  factor = dot([-n_z*n_x; -n_z*n_y; n_x^2 + n_y^2], [-n_z*n_x; -n_z*n_y; n_x^2 + n_y^2]);
-  Fcell{3} = factor .* F;
-  
-  Fcell{4} = -n_y*n_x .* F;
-  Fcell{5} = -n_x*n_z .* F;
-  Fcell{6} = -n_y*n_z .* F;
-  
-  S_iE = S_iE + [Fcell{1},Fcell{4},Fcell{5}; Fcell{4},Fcell{2},Fcell{6}; Fcell{5},Fcell{6},Fcell{3}];
+  S_iE = S_iE + [(n_y^2+n_z^2).*F, -n_y*n_x.*F, -n_x*n_z.*F;
+                 -n_y*n_x.*F, (n_x^2+n_z^2).*F, -n_y*n_z.*F;
+                 -n_x*n_z.*F, -n_y*n_z.*F, (n_x^2+n_y^2).*F];
 end
 end
 

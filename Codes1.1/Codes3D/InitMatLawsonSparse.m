@@ -1,5 +1,7 @@
 % Initialize the Matrices needed for the Lawson scheme using sparse
-% matrices
+% matrices.
+
+% PEC boundary conditions are implemented.
 
 blksize = 3 * Np;
 
@@ -11,7 +13,7 @@ Cfine = spalloc(2 * blksize * K, 2 * blksize * K, round(frac_fine * 78*K*Np^2));
 % Inverse of MassMatrix
 invM = inv(MassMatrix);
 
-% Upper Right Block
+% filling in Cfine and Ccoarse
 for i = 1:K
     % Stiffness
     Dx = rx(1,i) * Dr + sx(1,i) * Ds + tx(1,i) * Dt;
@@ -23,12 +25,18 @@ for i = 1:K
     invMi = invM./J(1, i);
     invMi = blkdiag(invMi, invMi, invMi);
     
-    % Diagonal entry
-    S = S - invMi * SurfaceMassInteriorLawson(r,s,t,i);
+    % Diagonal entry for upper right block
+    S_E = S - invMi * SurfaceMassInteriorLawson(r,s,t,i);
+    
+    % Diagonal entry for lower left block
+    S_H = -(S - invMi * SurfaceMassLawson(r,s,t,i));
+    
     if ismember(i, fine_idx)
-        Cfine((i-1)*blksize+1:i*blksize, (i-1)*blksize+1+K*blksize:i*blksize+K*blksize) = S;
+        Cfine((i-1)*blksize+1:i*blksize, (i-1)*blksize+1+K*blksize:i*blksize+K*blksize) = S_E; %upper right
+        Cfine((i-1)*blksize+1+K*blksize:i*blksize+K*blksize, (i-1)*blksize+1:i*blksize) = S_H; %lower left
     else
-        Ccoarse((i-1)*blksize+1:i*blksize, (i-1)*blksize+1+K*blksize:i*blksize+K*blksize) = S;
+        Ccoarse((i-1)*blksize+1:i*blksize, (i-1)*blksize+1+K*blksize:i*blksize+K*blksize) = S_E; %upper right
+        Ccoarse((i-1)*blksize+1+K*blksize:i*blksize+K*blksize, (i-1)*blksize+1:i*blksize) = S_H; %lower left
     end
     
     % Add the S_ikPlus
@@ -39,18 +47,17 @@ for i = 1:K
         end
         
         if ismember(k, fine_idx)
-            Cfine((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t);
+            Cfine((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t); %upper right
+            Cfine((i-1)*blksize+1+K*blksize:i*blksize+K*blksize, (k-1)*blksize+1:k*blksize) = invMi * S_ikPlusLawson(i,k,r,s,t); %lower left
         else
-            Ccoarse((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t);
+            Ccoarse((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t); %upper right
+            Ccoarse((i-1)*blksize+1+K*blksize:i*blksize+K*blksize, (k-1)*blksize+1:k*blksize) = invMi * S_ikPlusLawson(i,k,r,s,t); %lower left
         end
     end
 end
 
-% Lower Left Block (=-Upper Right because eps=my=1)
-Ccoarse(K*blksize+1:end, 1:K*blksize) = -Ccoarse(1:K*blksize, K*blksize+1:end);
-Cfine(K*blksize+1:end, 1:K*blksize) = -Cfine(1:K*blksize, K*blksize+1:end);
-
-% Boundary condition not working
+% Boundary condition as proposed in the paper not working.
+% The Boundary condition is implemented in SurfaceMassLawson.
 
 % %Upper Left Block
 % for i=1:K

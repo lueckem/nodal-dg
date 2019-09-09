@@ -6,16 +6,16 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 2;
+N = 3;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK268.neu');
+[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
 
 % Initialize solver and construct grid and metric
 StartUp3D;
 
 % Source function
-%source = @(t) sin(4*pi*t);
+%source = @(t) sin(pi*t);
 %source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
 source = @(t) 0;
 source_coordinates = [0,0,0];
@@ -23,30 +23,30 @@ source_coordinates = [0,0,0];
 %sample node over time
 node_idx = findNearestNode([0.25,0.25,0]);
 
-FinalTime = 2;
+FinalTime = 10;
 
 %PML every element that is at the boundary
-sigmax = zeros(1, K);
-for i = 1:K
-   for j = 1:4
-      if EToE(i,j) == i
-          sigmax(i) = 1;
-          break;
-      end
-   end
-end
+sigmax = 5*ones(1, K);
+% for i = 1:K
+%    for j = 1:4
+%       if EToE(i,j) == i
+%           sigmax(i) = 1;
+%           break;
+%       end
+%    end
+% end
 sigmay = sigmax; sigmaz = sigmax;
 %% Maxwell3D
-% % zero initial condition 
-% Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
-% Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
-% %xmode = 1; ymode = 1; 
-% %Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
-% 
-% % node_source = findNearestNode(source_coordinates);
-% % Ez(:,node_source(2)) = 1;
-% 
-% [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
+% zero initial condition 
+Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
+Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
+xmode = 1; ymode = 1; zmode = 1; 
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y).*sin(zmode*pi*z);
+
+% node_source = findNearestNode(source_coordinates);
+% Ez(:,node_source(2)) = 1;
+
+[Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DPointSource(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
 %% Lawson
 %% Initialize Matrices
@@ -87,14 +87,16 @@ InitMatLawsonSparse;
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 % 1 element
-node_source = findNearestNode(source_coordinates);
-Ez(:,node_source(2)) = 1;
+% node_source = findNearestNode(source_coordinates);
+% Ez(:,node_source(2)) = 1;
+% Hx(:,node_source(2)) = 1;
+% Hy(:,node_source(2)) = -1;
 % mode
-%xmode = 1; ymode = 1; 
-%Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
+xmode = 1; ymode = 1; zmode = 1; 
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y).*sin(zmode*pi*z);
 
 % load initial conditions from file
-% load("init_cond.mat")
+%load("init_cond.mat")
 % 
 [Hx,Hy,Hz,Ex,Ey,Ez] = Maxwell3DMat(Hx,Hy,Hz,Ex,Ey,Ez,FinalTime,source,source_coordinates);
 
@@ -110,9 +112,10 @@ Ez(:,node_source(2)) = 1;
 %    end
 % end
 
-% figure;
-% hold on;
-% plot(Ez_time_base(1,:), Ez_time_base(2,:), 'r');
-% plot(Ez_time(1,:), Ez_time(2,:), 'b');
-% legend("base", "new");
+figure;
+hold on;
+plot(Ez_time(1,:), Ez_time(2,:), 'b');
+plot(Ez_time_1(1,:), Ez_time_1(2,:), 'r');
+plot(Ez_time_0(1,:), Ez_time_0(2,:), 'k');
+legend("sigma=5", "sigma=1", "sigma=0");
 
