@@ -34,7 +34,7 @@ Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-nextplottime = 0.2;
+nextplottime = 0.1;
 
 while (time<FinalTime) % outer time step loop 
     
@@ -63,7 +63,7 @@ while (time<FinalTime) % outer time step loop
    
    %plot
 %    if time > nextplottime
-%        nextplottime = nextplottime + 0.2;
+%        nextplottime = nextplottime + 0.1;
 %        f = figure('visible','off');
 %        PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
 %        filename = "field" + num2str(tstep + ".png");

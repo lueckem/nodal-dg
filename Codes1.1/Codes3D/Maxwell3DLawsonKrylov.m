@@ -72,12 +72,12 @@ while (time<FinalTime)
   for k = 1:5
       phi1star = ExpCfinev((rk4cLawson(k+1)-rk4cLawson(k))*dt, phi1);
       phi2 = rk4a(k) * ExpCfinev((rk4cLawson(k+1)-rk4cLawson(k))*dt, phi2) + dt * Ccoarse * phi1star;
-      phi2 = phi2 + dt * (blkmult(sigma1, phi1, Np, K) - P); % add PML terms
+      phi2 = phi2 + dt * (blkmult(sigma1, phi1star, Np, K) - P); % add PML terms
       phi1 = phi1star + rk4b(k) * phi2;
       
       % integrate P
       resP = rk4a(k)*resP + dt * (blkmult(sigma2,P,Np,K) + blkmult(sigma3,phi1,Np,K));
-      P = P + rk4b(k) * resP;
+      P = P + rk4b(k) * resP;  
   end
   U = ExpCfinev((1-rk4cLawson(6))*dt, phi1);
   
@@ -105,21 +105,3 @@ end
 ReorderBackLawson;
 [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);
 return;
-
-% What must be added to the Ex RHS (k-th element, n-th node ):
-% rhsEx += (-mesh->epsilon[k]*(s_y + s_z - s_x)*Ex - Px[k][n]);
-
-% RHS for the PML field Px:
-% rhsPx[k][n] = (-s_x*Px[k][n] + mesh->epsilon[k]*(s_x*s_x + s_y*s_z - s_y*s_x - s_z*s_x)*Ex);
-% 
-% And so on
-% rhsEy += (-mesh->epsilon[k]*(s_x + s_z - s_y)*Ey - Py[k][n]);
-% rhsPy[k][n] = (-s_y*Py[k][n] + mesh->epsilon[k]*(s_y*s_y + s_x*s_z - s_z*s_y - s_y*s_x)*Ey);
-% rhsEz += (-mesh->epsilon[k]*(s_y + s_x - s_z)*Ez - Pz[k][n]);
-% rhsPz[k][n] = (-s_z*Pz[k][n] + mesh->epsilon[k]*(s_z*s_z + s_y*s_x - s_z*s_x - s_y*s_z)*Ez);
-% rhsHx += (-(s_y + s_z - s_x)*Hx - Qx[k][n]);
-% rhsQx[k][n] = (-s_x*Qx[k][n] + (s_x*s_x + s_y*s_z - s_y*s_x - s_z*s_x)*Hx);
-% rhsHy += (-(s_x + s_z - s_y)*Hy - Qy[k][n]);
-% rhsQy[k][n] = (-s_y*Qy[k][n] + (s_y*s_y + s_x*s_z - s_z*s_y - s_y*s_x)*Hy);
-% rhsHz += (-(s_y + s_x - s_z)*Hz - Qz[k][n]);
-% rhsQz[k][n] = (-s_z*Qz[k][n] + (s_z*s_z + s_y*s_x - s_z*s_x - s_y*s_z)*Hz);

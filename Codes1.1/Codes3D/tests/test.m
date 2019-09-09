@@ -6,7 +6,7 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 3;
+N = 5;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
@@ -26,7 +26,8 @@ node_idx = findNearestNode([0.25,0.25,0]);
 FinalTime = 10;
 
 %PML every element that is at the boundary
-sigmax = 5*ones(1, K);
+%sigmax = 0*ones(1, K);
+sigmax = [1, 1, 1, 1, 0];
 % for i = 1:K
 %    for j = 1:4
 %       if EToE(i,j) == i
@@ -40,8 +41,10 @@ sigmay = sigmax; sigmaz = sigmax;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
+
+% mode
 xmode = 1; ymode = 1; zmode = 1; 
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y).*sin(zmode*pi*z);
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
 
 % node_source = findNearestNode(source_coordinates);
 % Ez(:,node_source(2)) = 1;
@@ -55,9 +58,7 @@ Ez = sin(xmode*pi*x).*sin(ymode*pi*y).*sin(zmode*pi*z);
 % fine_idx = [nodeIndex(2),EToE(nodeIndex(2),:)];
 % fine_idx = unique(fine_idx);
 
-fine_idx = [];
-
-
+fine_idx = 5;
 %fine_idx = [190,199,207,232,246,248]; %Bad elements in cubeK268BAD
 
 InitMatLawsonSparse;
@@ -67,6 +68,10 @@ InitMatLawsonSparse;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = ones(Np, K)* eps;
+
+% mode
+xmode = 1; ymode = 1; zmode = 1; 
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
 
 % load initial conditions from file
 %load("init_cond.mat")
@@ -93,7 +98,7 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 % Hy(:,node_source(2)) = -1;
 % mode
 xmode = 1; ymode = 1; zmode = 1; 
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y).*sin(zmode*pi*z);
+Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
 
 % load initial conditions from file
 %load("init_cond.mat")
@@ -114,8 +119,9 @@ Ez = sin(xmode*pi*x).*sin(ymode*pi*y).*sin(zmode*pi*z);
 
 figure;
 hold on;
-plot(Ez_time(1,:), Ez_time(2,:), 'b');
-plot(Ez_time_1(1,:), Ez_time_1(2,:), 'r');
-plot(Ez_time_0(1,:), Ez_time_0(2,:), 'k');
-legend("sigma=5", "sigma=1", "sigma=0");
+plot(Ez_time_mat_0(1,:), Ez_time_mat_0(2,:), 'b-o');
+plot(Ez_time_krylov_0(1,:), Ez_time_krylov_0(2,:), 'r-x');
+plot(Ez_time_mat_1(1,:), Ez_time_mat_1(2,:), 'b-o');
+plot(Ez_time_krylov_1(1,:), Ez_time_krylov_1(2,:), 'r-x');
+legend("original", "Lawson");
 
