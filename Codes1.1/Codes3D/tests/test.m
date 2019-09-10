@@ -9,7 +9,7 @@ Globals3D;
 N = 5;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV] = MeshReaderGambit3D('cubeK5.neu');
+[Nv, VX, VY, VZ, K, EToV, epsilon] = MeshReaderGambit3DMaterial('cubeK5.neu');
 
 % Initialize solver and construct grid and metric
 StartUp3D;
@@ -119,9 +119,7 @@ Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
 
 figure;
 hold on;
-plot(Ez_time_mat_0(1,:), Ez_time_mat_0(2,:), 'b-o');
-plot(Ez_time_krylov_0(1,:), Ez_time_krylov_0(2,:), 'r-x');
-plot(Ez_time_mat_1(1,:), Ez_time_mat_1(2,:), 'b-o');
-plot(Ez_time_krylov_1(1,:), Ez_time_krylov_1(2,:), 'r-x');
+plot(Ez_time_mat(1,:), Ez_time_mat(2,:), 'b-o');
+plot(Ez_time_krylov(1,:), Ez_time_krylov(2,:), 'r-x');
 legend("original", "Lawson");
 

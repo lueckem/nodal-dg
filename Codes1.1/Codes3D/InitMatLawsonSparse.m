@@ -26,7 +26,7 @@ for i = 1:K
     invMi = blkdiag(invMi, invMi, invMi);
     
     % Diagonal entry for upper right block
-    S_E = S - invMi * SurfaceMassInteriorLawson(r,s,t,i);
+    S_E = S - (invMi./epsilon(i)) * SurfaceMassInteriorLawson(r,s,t,i);
     
     % Diagonal entry for lower left block
     S_H = -(S - invMi * SurfaceMassLawson(r,s,t,i));
@@ -47,10 +47,10 @@ for i = 1:K
         end
         
         if ismember(k, fine_idx)
-            Cfine((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t); %upper right
+            Cfine((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -(invMi./epsilon(i)) * S_ikPlusLawson(i,k,r,s,t); %upper right
             Cfine((i-1)*blksize+1+K*blksize:i*blksize+K*blksize, (k-1)*blksize+1:k*blksize) = invMi * S_ikPlusLawson(i,k,r,s,t); %lower left
         else
-            Ccoarse((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -invMi * S_ikPlusLawson(i,k,r,s,t); %upper right
+            Ccoarse((i-1)*blksize+1:i*blksize, (k-1)*blksize+1+K*blksize:k*blksize+K*blksize) = -(invMi./epsilon(i)) * S_ikPlusLawson(i,k,r,s,t); %upper right
             Ccoarse((i-1)*blksize+1+K*blksize:i*blksize+K*blksize, (k-1)*blksize+1:k*blksize) = invMi * S_ikPlusLawson(i,k,r,s,t); %lower left
         end
     end

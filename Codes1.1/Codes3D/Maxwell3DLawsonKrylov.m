@@ -56,7 +56,7 @@ phi2 = zeros(size(U));
 % PML fields
 P = zeros(2*3*Np*K,1);
 resP = zeros(2*3*Np*K,1);
-[sigma1, sigma2, sigma3] = constructSigma(); 
+[sigma1, sigma2, sigma3] = constructSigma();
 
 
 nextplottime = 0.05;
@@ -76,7 +76,7 @@ while (time<FinalTime)
       phi1 = phi1star + rk4b(k) * phi2;
       
       % integrate P
-      resP = rk4a(k)*resP + dt * (blkmult(sigma2,P,Np,K) + blkmult(sigma3,phi1,Np,K));
+      resP = rk4a(k)*resP + dt * (blkmult(sigma2,P,Np,K) + blkmult(sigma3,phi1star,Np,K));
       P = P + rk4b(k) * resP;  
   end
   U = ExpCfinev((1-rk4cLawson(6))*dt, phi1);

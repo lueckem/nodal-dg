@@ -14,6 +14,9 @@ global Nfaces EToE EToF EToV
 global V invV
 global x y z NODETOL
 
+% material
+global epsilon
+
 % Variables for Lawson scheme
 global fine_idx Cfine Ccoarse C_idx size_Cff Cff Ccf
 
