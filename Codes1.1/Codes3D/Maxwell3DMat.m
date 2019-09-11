@@ -11,8 +11,8 @@ Globals3D;
 Ez_time = [];
 
 % Calculate Data for plotting
-% [x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(0);
-% 
+% [x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(150);
+
 % f = figure('visible','off');
 % PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
 % filename = "field" + num2str(1+ ".png");
@@ -23,21 +23,22 @@ U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
 % find element to inject the source
 idx = findNearestNode(source_coordinates);
-idx = [(1:Np)', idx(2)*ones(Np,1)]; 
+%idx = [(1:Np)', idx(2)*ones(Np,1)]; 
 idx = idxEH_to_idxU(3, idx);
 
 % find element so sample field
 idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
-dt = dtscale3D  % TW: buggy
+dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
+dt = dt/10;
 
 time = 0; tstep = 1;
 
-nextplottime = 0.1;
+nextplottime = 50;
 
 % PML fields
 P = zeros(2*3*Np*K,1);
@@ -72,7 +73,7 @@ while (time<FinalTime) % outer time step loop
    % plot
 %    if time > nextplottime
 %        [~,~,~,~,~,Ez] = UToFields(U);
-%        nextplottime = nextplottime + 0.1;
+%        nextplottime = nextplottime + 50;
 %        f = figure('visible','off');
 %        PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
 %        title(num2str(time));

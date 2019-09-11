@@ -14,15 +14,15 @@ dHx(:)  = Hx(vmapP)-Hx(vmapM);  dEx(:)  = Ex(vmapP)-Ex(vmapM);
 dHy(:)  = Hy(vmapP)-Hy(vmapM); 	dEy(:)  = Ey(vmapP)-Ey(vmapM);	
 dHz(:)  = Hz(vmapP)-Hz(vmapM);  dEz(:)  = Ez(vmapP)-Ez(vmapM);  
 
-% % make silver mueller boundary conditions
-% dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB); 
-% dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
-% dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
+% make silver mueller boundary conditions
+dHx(mapB) = -2*Hx(vmapB);  dEx(mapB) = -2*Ex(vmapB); 
+dHy(mapB) = -2*Hy(vmapB);  dEy(mapB) = -2*Ey(vmapB); 
+dHz(mapB) = -2*Hz(vmapB);  dEz(mapB) = -2*Ez(vmapB);
 
 % PEC boundary conditions
-dEx(mapB) = -2*Ex(vmapB); 
-dEy(mapB) = -2*Ey(vmapB); 
-dEz(mapB) = -2*Ez(vmapB);
+% dEx(mapB) = -2*Ex(vmapB); 
+% dEy(mapB) = -2*Ey(vmapB); 
+% dEz(mapB) = -2*Ez(vmapB);
 
 alpha=0;
 

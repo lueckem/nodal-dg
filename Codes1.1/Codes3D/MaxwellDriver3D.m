@@ -18,9 +18,9 @@ mmode = 1; nmode = 1;
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); 
 
-%Ez = exp(-20*(x.^2 + y.^2));
-xmode = 1; ymode = 1; 
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
+Ez = exp(-20*(x.^2 + y.^2));
+% xmode = 1; ymode = 1; 
+% Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 % Solve Problem
 FinalTime = 8;

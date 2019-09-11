@@ -1,12 +1,7 @@
-%Test the Maxwell3D vs Maxwell3DLawson for a point source in the middle of
-%the grid
-
-% Boundary Conditions instable??
-
 Globals3D;
 
 % Polynomial order of approximation 
-N = 5;
+N = 6;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV, epsilon] = MeshReaderGambit3DMaterial('cubeK5.neu');
@@ -15,19 +10,19 @@ N = 5;
 StartUp3D;
 
 % Source function
-%source = @(t) sin(pi*t);
+source = @(t) sin(pi*t);
 %source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
-source = @(t) 0;
+%source = @(t) 0;
 source_coordinates = [0,0,0];
 
 %sample node over time
-node_idx = findNearestNode([0.25,0.25,0]);
+node_idx = findNearestNode([0.5,0.5,0]);
 
-FinalTime = 10;
+FinalTime = 4;
 
 %PML every element that is at the boundary
-%sigmax = 0*ones(1, K);
-sigmax = [1, 1, 1, 1, 0];
+sigmax = 0*ones(1, K);
+%sigmax = [1, 1, 1, 1, 0];
 % for i = 1:K
 %    for j = 1:4
 %       if EToE(i,j) == i
@@ -43,7 +38,7 @@ Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 % mode
-xmode = 1; ymode = 1; zmode = 1; 
+xmode = 1; ymode = 1; zmode = 1;
 Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
 
 % node_source = findNearestNode(source_coordinates);
@@ -91,14 +86,15 @@ InitMatLawsonSparse;
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
+% Ez = exp(-20*(x.^2 + y.^2));
 % 1 element
 % node_source = findNearestNode(source_coordinates);
 % Ez(:,node_source(2)) = 1;
 % Hx(:,node_source(2)) = 1;
 % Hy(:,node_source(2)) = -1;
 % mode
-xmode = 1; ymode = 1; zmode = 1; 
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
+% xmode = 1; ymode = 1;
+% Ez = sin(xmode*pi*x).*sin(ymode*pi*y);
 
 % load initial conditions from file
 %load("init_cond.mat")
