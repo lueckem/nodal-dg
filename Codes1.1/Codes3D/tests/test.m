@@ -117,5 +117,5 @@ figure;
 hold on;
 plot(Ez_time_mat(1,:), Ez_time_mat(2,:), 'b-o');
 plot(Ez_time_krylov(1,:), Ez_time_krylov(2,:), 'r-x');
-legend("original", "Lawson");
+legend("LSRK", "Lawson");
 

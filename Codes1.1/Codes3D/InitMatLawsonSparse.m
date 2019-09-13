@@ -1,7 +1,7 @@
 % Initialize the Matrices needed for the Lawson scheme using sparse
 % matrices.
 
-% SM boundary conditions are implemented.
+% PEC boundary conditions are implemented.
 
 blksize = 3 * Np;
 
@@ -26,7 +26,7 @@ for i = 1:K
     invMi = blkdiag(invMi, invMi, invMi);
     
     % Diagonal entry for upper right block
-    S_E = S - (invMi./epsilon(i)) * SurfaceMassLawson(r,s,t,i);
+    S_E = S - (invMi./epsilon(i)) * SurfaceMassInteriorLawson(r,s,t,i);
     
     % Diagonal entry for lower left block
     S_H = -(S - invMi * SurfaceMassLawson(r,s,t,i));

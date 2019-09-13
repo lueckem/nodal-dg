@@ -11,13 +11,13 @@ Globals3D;
 Ez_time = [];
 
 % Calculate Data for plotting
-% [x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(150);
+[x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(150);
 
-% f = figure('visible','off');
-% PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
-% filename = "field" + num2str(1+ ".png");
-% saveas(f,filename);
-% close;
+f = figure('visible','off');
+PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
+filename = "field" + num2str(1+ ".png");
+saveas(f,filename);
+close;
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
@@ -33,12 +33,11 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 dt = dtscale3D;  % TW: buggy
 
 % correct dt for integer # of time steps
-Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps;
-dt = dt/10;
+Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-nextplottime = 50;
+nextplottime = 25;
 
 % PML fields
 P = zeros(2*3*Np*K,1);
@@ -71,16 +70,16 @@ while (time<FinalTime) % outer time step loop
    Ez_time = [Ez_time, [time;U(idx_sample)]];
    
    % plot
-%    if time > nextplottime
-%        [~,~,~,~,~,Ez] = UToFields(U);
-%        nextplottime = nextplottime + 50;
-%        f = figure('visible','off');
-%        PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
-%        title(num2str(time));
-%        filename = "field" + num2str(tstep + ".png");
-%        saveas(f,filename);
-%        close;
-%   end
+   if time > nextplottime
+       [~,~,~,~,~,Ez] = UToFields(U);
+       nextplottime = nextplottime + 25;
+       f = figure('visible','off');
+       PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
+       title(num2str(time));
+       filename = "field" + num2str(tstep + ".png");
+       saveas(f,filename);
+       close;
+  end
 end
 toc;
 
