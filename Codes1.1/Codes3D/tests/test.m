@@ -1,24 +1,26 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 6;
+N = 2;
 
 % Read in Mesh
-[Nv, VX, VY, VZ, K, EToV, epsilon] = MeshReaderGambit3DMaterial('cubeK5.neu');
+[Nv, VX, VY, VZ, K, EToV, epsilon] = MeshReaderGambit3DMaterial('cube.neu');
+epsilon = ones(K,1);
+epsilon(1:100) = 2;
 
 % Initialize solver and construct grid and metric
 StartUp3D;
 
 % Source function
-source = @(t) sin(pi*t);
-%source = @(t) 0.2 * exp(-5*(t-1).^2).*sin(4*pi*t);
+%source = @(t) sin(pi*t);
+source = @(t) exp(-5*(t-1).^2).*sin(4*pi*t);
 %source = @(t) 0;
 source_coordinates = [0,0,0];
 
 %sample node over time
 node_idx = findNearestNode([0.5,0.5,0]);
 
-FinalTime = 4;
+FinalTime = 6;
 
 %PML every element that is at the boundary
 sigmax = 0*ones(1, K);
@@ -38,8 +40,8 @@ Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 % mode
-xmode = 1; ymode = 1; zmode = 1;
-Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
+%xmode = 1; ymode = 1; zmode = 1;
+%Ez = sin(xmode*pi*x).*sin(ymode*pi*y);%.*sin(zmode*pi*z);
 
 % node_source = findNearestNode(source_coordinates);
 % Ez(:,node_source(2)) = 1;
@@ -115,7 +117,13 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 figure;
 hold on;
-plot(Ez_time_mat(1,:), Ez_time_mat(2,:), 'b-o');
-plot(Ez_time_krylov(1,:), Ez_time_krylov(2,:), 'r-x');
-legend("LSRK", "Lawson");
+plot(Ez_time_mat03(1,:), Ez_time_mat03(2,:), 'k-o');
+%plot(Ez_time_orig(1,:), Ez_time_orig(2,:), 'r-x');
+plot(Ez_time_krylov03(1,:), Ez_time_krylov03(2,:), 'r-x');
+plot(Ez_time_krylov08(1,:), Ez_time_krylov08(2,:), 'c-x');
+plot(Ez_time_krylov11(1,:), Ez_time_krylov11(2,:), 'm-x');
+plot(Ez_time_krylov14(1,:), Ez_time_krylov14(2,:), 'b-x');
+plot(Ez_time_krylov18(1,:), Ez_time_krylov18(2,:), 'y-x');
+plot(Ez_time_krylov30(1,:), Ez_time_krylov30(2,:), 'g-x');
+legend("LSRK, dt=0.3", "Lawson, dt=0.3","Lawson, dt=0.8","Lawson, dt=1.1","Lawson, dt=1.4","Lawson, dt=1.8","Lawson, dt=3.0")
 

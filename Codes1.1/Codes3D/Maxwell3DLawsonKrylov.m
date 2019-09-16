@@ -28,7 +28,7 @@ ReorderLawson;
 
 % find element to inject the source
 idx = findNearestNode(source_coordinates);
-idx = [(1:Np)', idx(2)*ones(Np,1)]; 
+%idx = [(1:Np)', idx(2)*ones(Np,1)]; 
 idx = idxEH_to_idxU(3, idx);
 
 % find element so sample field
@@ -40,6 +40,7 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
 dt = dtscale3D;  % TW: buggy
+dt = 0.8;
 
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
@@ -62,10 +63,11 @@ resP = zeros(2*3*Np*K,1);
 nextplottime = 0.05;
 
 % outer time step loop
+tic
 while (time<FinalTime)
     
   % inject the source
-   U(idx) = U(idx) + source(time);
+   U(idx) = U(idx) + dt * source(time);
   
   % Lawson-LSRK scheme
   phi1 = U;
@@ -100,7 +102,7 @@ while (time<FinalTime)
    %store field value over time
    Ez_time = [Ez_time, [time;U(idx_sample)]];
 end
-
+toc
 % convert U back to field components
 ReorderBackLawson;
 [Hx,Hy,Hz,Ex,Ey,Ez] = UToFields(U);

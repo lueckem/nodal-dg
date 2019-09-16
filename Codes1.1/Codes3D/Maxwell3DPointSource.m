@@ -20,7 +20,7 @@ Ez_time = [];
        
 % find element to inject the source
 idx = findNearestNode(source_coordinates);
-idx = idx(2);
+%idx = idx(2);
 
 % Runge-Kutta residual storage  
 resHx = zeros(Np,K); resHy = zeros(Np,K); resHz = zeros(Np,K); 
@@ -39,7 +39,7 @@ nextplottime = 0.1;
 while (time<FinalTime) % outer time step loop 
     
   % inject the source
-  Ez(:, idx) = Ez(:, idx) + source(time);
+  Ez(idx(1), idx(2)) = Ez(idx(1), idx(2)) + source(time);
     
   for INTRK = 1:5   % inner multi-stage Runge-Kutta loop
     

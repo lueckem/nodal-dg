@@ -11,13 +11,13 @@ Globals3D;
 Ez_time = [];
 
 % Calculate Data for plotting
-[x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(150);
-
-f = figure('visible','off');
-PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
-filename = "field" + num2str(1+ ".png");
-saveas(f,filename);
-close;
+% [x_grid, y_grid, sampleTets, sampleWeights] = CalcSamplingData(150);
+% 
+% f = figure('visible','off');
+% PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.1);
+% filename = "field" + num2str(1+ ".png");
+% saveas(f,filename);
+% close;
 
 U = FieldsToU(Hx, Hy, Hz, Ex, Ey, Ez);
 
@@ -30,8 +30,8 @@ idx = idxEH_to_idxU(3, idx);
 idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
-dt = dtscale3D;  % TW: buggy
-
+%dt = dtscale3D;  % TW: buggy
+dt = 0.4;
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
@@ -50,7 +50,7 @@ tic;
 while (time<FinalTime) % outer time step loop 
     
   % inject the source
-  U(idx) = U(idx) + source(time);
+  U(idx) = U(idx) + dt * source(time);
   
   % Runge-Kutta loop	
   for INTRK = 1:5   
@@ -68,18 +68,19 @@ while (time<FinalTime) % outer time step loop
    
    %store field value over time
    Ez_time = [Ez_time, [time;U(idx_sample)]];
+   U(idx_sample)
    
    % plot
-   if time > nextplottime
-       [~,~,~,~,~,Ez] = UToFields(U);
-       nextplottime = nextplottime + 25;
-       f = figure('visible','off');
-       PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
-       title(num2str(time));
-       filename = "field" + num2str(tstep + ".png");
-       saveas(f,filename);
-       close;
-  end
+%    if time > nextplottime
+%        [~,~,~,~,~,Ez] = UToFields(U);
+%        nextplottime = nextplottime + 25;
+%        f = figure('visible','off');
+%        PlotPlain3DFast(Ez, x_grid, y_grid, sampleTets, sampleWeights); drawnow; pause(0.01);
+%        title(num2str(time));
+%        filename = "field" + num2str(tstep + ".png");
+%        saveas(f,filename);
+%        close;
+%   end
 end
 toc;
 
