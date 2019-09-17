@@ -40,7 +40,7 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
 dt = dtscale3D;  % TW: buggy
-dt = 0.8;
+dt = 3;
 
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
