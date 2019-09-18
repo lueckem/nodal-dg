@@ -24,7 +24,7 @@ dEx(mapB) = -2*Ex(vmapB);
 dEy(mapB) = -2*Ey(vmapB); 
 dEz(mapB) = -2*Ez(vmapB);
 
-alpha=0;
+alpha=1;
 
 ndotdH = nx.*dHx + ny.*dHy + nz.*dHz;
 ndotdE = nx.*dEx + ny.*dEy + nz.*dEz;

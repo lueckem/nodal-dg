@@ -31,7 +31,7 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
 dt = dtscale3D;  % TW: buggy
-dt = 0.3;
+dt = 0.25;
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
@@ -69,6 +69,7 @@ while (time<FinalTime) % outer time step loop
    
    %store field value over time
    Ez_time = [Ez_time, [time;U(idx_sample)]];
+   U(idx_sample)
    
    % plot
 %    if time > nextplottime

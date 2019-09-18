@@ -3,7 +3,7 @@
 Globals3D;
 
 % Polynomial order of approximation 
-N = 2;
+N = 3;
 
 % Read in Mesh
 [Nv, VX, VY, VZ, K, EToV, epsilon] = MeshReaderGambit3DMaterial('sphBAD.neu');
@@ -21,7 +21,7 @@ source_coordinates = [150,150,150];
 %sample node over time
 node_idx = findNearestNode([150,250,150]);
 
-FinalTime = 300;
+FinalTime = 100;
 
 % No PML
 sigmax = 0*ones(1, K);
@@ -30,7 +30,7 @@ sigmay = sigmax; sigmaz = sigmax;
 %% Maxwell3DMat
 fine_idx = [];
 InitMatLawsonSparse;
-%
+%%
 % zero initial condition 
 Hx = zeros(Np, K); Hy = zeros(Np, K); Hz = zeros(Np, K);
 Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);

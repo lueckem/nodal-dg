@@ -117,11 +117,11 @@ Ex = zeros(Np, K); Ey = zeros(Np, K); Ez = zeros(Np, K);
 
 figure;
 hold on;
-plot(Ez_time_mat03(1,:), Ez_time_mat03(2,:), 'k-o');
-plot(Ez_time_krylov10(1,:), Ez_time_krylov10(2,:), 'y-x');
-plot(Ez_time_krylov13(1,:), Ez_time_krylov13(2,:), 'r-x');
-plot(Ez_time_krylov15(1,:), Ez_time_krylov15(2,:), 'm-x');
-plot(Ez_time_krylov20(1,:), Ez_time_krylov20(2,:), 'g-x');
-plot(Ez_time_krylov30(1,:), Ez_time_krylov30(2,:), 'b-x');
-legend("LSRK, dt=0.3","Lawson, dt=1","Lawson, dt=1.3","Lawson, dt=1.5","Lawson, dt=2","Lawson, dt=3.0")
+plot(Ez_time_mat02(1,:), Ez_time_mat02(2,:), 'k-o');
+plot(Ez_time_krylov06(1,:), Ez_time_krylov06(2,:), 'b-x');
+plot(Ez_time_krylov10(1,:), Ez_time_krylov10(2,:), 'r-x');
+% plot(Ez_time_krylov15(1,:), Ez_time_krylov15(2,:), 'm-x');
+% plot(Ez_time_krylov20(1,:), Ez_time_krylov20(2,:), 'g-x');
+% plot(Ez_time_krylov30(1,:), Ez_time_krylov30(2,:), 'b-x');
+legend("LSRK, dt=0.2","Lawson, dt=0.6","Lawson, dt=1")%,"Lawson, dt=1.5","Lawson, dt=2","Lawson, dt=3.0")
 

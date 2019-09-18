@@ -28,6 +28,7 @@ resEx = zeros(Np,K); resEy = zeros(Np,K); resEz = zeros(Np,K);
 
 % compute time step size
 dt = dtscale3D;  % TW: buggy
+dt = 0.5;
 
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
@@ -60,6 +61,7 @@ while (time<FinalTime) % outer time step loop
    
    %store field value over time
    Ez_time = [Ez_time, [time;Ez(node_idx(1),node_idx(2))]];
+   Ez(node_idx(1),node_idx(2))
    
    %plot
 %    if time > nextplottime
