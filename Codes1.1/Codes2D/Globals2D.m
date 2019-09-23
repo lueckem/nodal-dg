@@ -18,9 +18,6 @@ global cub gauss straight curved
 
 In = 1; Out = 2; Wall = 3; Far = 4; Cyl = 5; Dirichlet = 6; Neuman = 7; Slip = 8;
 
-% Variables for Lawson scheme
-global globalMassMatrix globalStiffnessMatrix
-
 % Low storage Runge-Kutta coefficients
 rk4a = [            0.0 ...
         -567301805773.0/1357537059087.0 ...

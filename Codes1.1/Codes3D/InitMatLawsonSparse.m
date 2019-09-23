@@ -7,8 +7,8 @@ blksize = 3 * Np;
 
 % allocate memory
 frac_fine = length(fine_idx)/K;
-Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, round((1-frac_fine) * 78*K*Np^2));
-Cfine = spalloc(2 * blksize * K, 2 * blksize * K, round(frac_fine * 78*K*Np^2));
+Ccoarse = spalloc(2 * blksize * K, 2 * blksize * K, round((1-frac_fine) * 60*K*Np^2));
+Cfine = spalloc(2 * blksize * K, 2 * blksize * K, round(frac_fine * 60*K*Np^2));
 
 % Inverse of MassMatrix
 invM = inv(MassMatrix);

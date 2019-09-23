@@ -40,14 +40,13 @@ idx_sample = idxEH_to_idxU(3, node_idx);
 
 % compute time step size
 dt = dtscale3D;  % TW: buggy
-dt = 1;
 
 % correct dt for integer # of time steps
 Ntsteps = ceil(FinalTime/dt); dt = FinalTime/Ntsteps
 
 time = 0; tstep = 1;
 
-rk4cLawson = [0 rk4c];   % We need c(0). What should the value be?
+rk4cLawson = [0 rk4c];   % c_0 = 0;
 size_Cff = 2*3*Np*length(fine_idx);
 Cff = Cfine(1:size_Cff,1:size_Cff);
 Ccf = Cfine(size_Cff+1:2*3*Np*K,1:size_Cff);
